@@ -17,24 +17,24 @@ Meta diária: R$${meta}
 Custo por unidade: R$${custo}
 
 Gere:
-- 5 pratos gourmet criativos
-- preço sugerido
-- quantas unidades vender para atingir a meta
+5 pratos gourmet criativos
+preço sugerido
+quantas unidades vender para atingir a meta
 `;
 
-const response = await fetch("https://api.openai.com/v1/chat/completions", {
+const response = await fetch("https://api.openai.com/v1/chat/completions",{
 
-method: "POST",
+method:"POST",
 
-headers: {
-"Content-Type": "application/json",
-"Authorization": `Bearer ${process.env.OPENAI_API_KEY}`
+headers:{
+"Content-Type":"application/json",
+"Authorization":`Bearer ${process.env.OPENAI_API_KEY}`
 },
 
 body: JSON.stringify({
-model: "gpt-4o-mini",
-messages: [
-{ role: "user", content: prompt }
+model:"gpt-4o-mini",
+messages:[
+{role:"user",content:prompt}
 ]
 })
 
@@ -42,11 +42,11 @@ messages: [
 
 const data = await response.json();
 
-if (!response.ok) {
-throw new Error(JSON.stringify(data));
-}
+console.log(data);
 
-const resultado = data.choices[0].message.content;
+const resultado =
+data?.choices?.[0]?.message?.content ||
+"Erro ao gerar cardápio com IA.";
 
 res.status(200).json({
 resultado: resultado
@@ -54,10 +54,10 @@ resultado: resultado
 
 }
 
-catch (error) {
+catch(error){
 
 res.status(500).json({
-erro: error.message
+resultado:"Erro interno na API"
 });
 
 }
