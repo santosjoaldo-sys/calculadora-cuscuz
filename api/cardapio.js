@@ -1,95 +1,187 @@
-export default async function handler(req, res) {
+<!DOCTYPE html>
+<html lang="pt-br">
 
-try {
+<head>
 
-if (req.method !== "POST") {
-return res.status(200).json({
-resultado: "API funcionando 🚀"
-});
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Gerador de Cardápio Lucrativo</title>
+
+<style>
+
+body{
+font-family: Arial;
+background:#fff5e6;
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
+margin:0;
 }
 
-// garante que o body exista
-const { tipo, meta, custo } = req.body || {};
-
-if (!tipo || !meta || !custo) {
-return res.status(400).json({
-resultado: "Dados incompletos enviados."
-});
+.container{
+background:white;
+padding:30px;
+width:450px;
+border-radius:12px;
+box-shadow:0 10px 25px rgba(0,0,0,0.1);
+text-align:center;
 }
 
-const prompt = `
-Crie um cardápio lucrativo para vender ${tipo}.
+h1{
+color:#ff7a00;
+}
 
-Meta diária: R$${meta}
-Custo por unidade: R$${custo}
+input, select{
+width:100%;
+padding:12px;
+margin-top:10px;
+border:1px solid #ddd;
+border-radius:6px;
+}
 
-FORMATE A RESPOSTA EM MARKDOWN.
+button{
+width:100%;
+padding:12px;
+margin-top:15px;
+background:#6a5acd;
+color:white;
+border:none;
+cursor:pointer;
+font-size:16px;
+}
 
-Estrutura obrigatória:
+button:hover{
+opacity:0.9;
+}
 
-## Cardápio Lucrativo
+.result{
+margin-top:25px;
+text-align:left;
+font-size:15px;
+line-height:1.5;
+}
 
-Para cada prato mostre:
+.result h2{
+color:#ff7a00;
+margin-top:15px;
+}
 
-**Nome do prato**  
-Descrição curta  
-Preço sugerido  
+.result strong{
+color:#333;
+}
 
-Depois crie uma tabela:
+.result table{
+border-collapse:collapse;
+width:100%;
+margin-top:20px;
+}
 
-| Prato | Preço sugerido | Unidades para atingir meta |
+.result table th{
+background:#ff7a00;
+color:white;
+padding:8px;
+}
 
-Use apenas 5 pratos.
+.result table td{
+border:1px solid #ddd;
+padding:8px;
+}
 
-Evite textos longos.
-`;
+.loading{
+color:#666;
+font-style:italic;
+}
 
-const response = await fetch("https://api.openai.com/v1/chat/completions", {
+</style>
 
-method: "POST",
+</head>
 
-headers: {
-"Content-Type": "application/json",
-"Authorization": `Bearer ${process.env.OPENAI_API_KEY}`
+<body>
+
+<div class="container">
+
+<h1>Gerador de Cardápio Lucrativo</h1>
+
+<select id="tipo">
+
+<option value="cuscuz gourmet">Cuscuz Gourmet</option>
+<option value="bolo no pote">Bolo no Pote</option>
+<option value="pastel">Pastel</option>
+
+</select>
+
+<input type="number" id="meta" placeholder="Quanto quer ganhar por dia">
+
+<input type="number" id="custo" placeholder="Custo por unidade">
+
+<button onclick="gerarCardapio()">Gerar Cardápio</button>
+
+<div class="result" id="resultado"></div>
+
+</div>
+
+
+<!-- biblioteca para converter Markdown em HTML -->
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+
+<script>
+
+async function gerarCardapio(){
+
+let tipo = document.getElementById("tipo").value;
+let meta = document.getElementById("meta").value;
+let custo = document.getElementById("custo").value;
+
+if(!meta || !custo){
+
+alert("Preencha todos os campos");
+
+return;
+
+}
+
+document.getElementById("resultado").innerHTML =
+"<span class='loading'>Gerando cardápio com IA...</span>";
+
+try{
+
+const response = await fetch("/api/cardapio",{
+
+method:"POST",
+
+headers:{
+"Content-Type":"application/json"
 },
 
 body: JSON.stringify({
-model: "gpt-4o-mini",
-temperature: 0.7,
-messages: [
-{ role: "user", content: prompt }
-]
+tipo: tipo,
+meta: meta,
+custo: custo
 })
 
 });
 
 const data = await response.json();
 
-// se a OpenAI retornar erro
-if (!response.ok) {
-return res.status(500).json({
-resultado: "Erro da OpenAI: " + JSON.stringify(data)
-});
-}
-
-const resultado =
-data?.choices?.[0]?.message?.content ||
-"Erro ao gerar cardápio com IA.";
-
-res.status(200).json({
-resultado: resultado
-});
+document.getElementById("resultado").innerHTML =
+marked.parse(data.resultado);
 
 }
 
-catch (error) {
+catch(error){
 
-console.error(error);
-
-res.status(500).json({
-resultado: "Erro interno: " + error.message
-});
+document.getElementById("resultado").innerHTML =
+"Erro ao gerar cardápio.";
 
 }
 
 }
+
+</script>
+
+</body>
+
+</html>
