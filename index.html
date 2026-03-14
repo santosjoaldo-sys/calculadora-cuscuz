@@ -1,47 +1,70 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
+
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Calculadora de Lucro do Cuscuz</title>
 
 <style>
+
 body{
 font-family: Arial;
-background:#fff8e8;
+background:#fff7e6;
 text-align:center;
 padding:40px;
 }
 
 .container{
 background:white;
+max-width:420px;
+margin:auto;
 padding:30px;
 border-radius:12px;
-max-width:400px;
-margin:auto;
-box-shadow:0 5px 20px rgba(0,0,0,0.1);
+box-shadow:0 10px 30px rgba(0,0,0,0.1);
+}
+
+h1{
+color:#ff7a00;
 }
 
 input{
 width:100%;
-padding:10px;
+padding:12px;
 margin:10px 0;
 font-size:16px;
 }
 
 button{
-background:#ff9800;
-border:none;
-padding:12px;
-color:white;
-font-size:16px;
 width:100%;
+padding:12px;
+margin-top:10px;
+background:#ff7a00;
+color:white;
+border:none;
+font-size:16px;
 cursor:pointer;
+border-radius:6px;
 }
 
 .result{
 margin-top:20px;
 font-size:18px;
 }
+
+.hidden{
+display:none;
+}
+
+.whatsapp{
+background:#25D366;
+}
+
+.ebook{
+background:#e53935;
+}
+
 </style>
 
 </head>
@@ -50,9 +73,9 @@ font-size:18px;
 
 <div class="container">
 
-<h2>Calculadora de Lucro do Cuscuz</h2>
+<h1>Calculadora de Lucro do Cuscuz</h1>
 
-<p>Descubra quanto você pode ganhar.</p>
+<p>Descubra quanto você pode ganhar vendendo cuscuz.</p>
 
 <input type="number" id="custo" placeholder="Custo por unidade">
 
@@ -64,17 +87,49 @@ font-size:18px;
 
 <div class="result" id="resultado"></div>
 
+<div id="emailBox" class="hidden">
+
+<h3>Veja seu lucro mensal</h3>
+
+<p>Digite seu email para desbloquear</p>
+
+<form action="https://formspree.io/f/xkoqzqlq" method="POST">
+
+<input type="email" name="email" placeholder="Seu email" required>
+
+<button type="submit">Ver resultado</button>
+
+</form>
+
+</div>
+
+<div style="margin-top:20px">
+
+<a href="https://wa.me/5571935009704" target="_blank">
+
+<button class="whatsapp">Falar no WhatsApp</button>
+
+</a>
+
+<a href="https://pay.hotmart.com/K92944551N?checkoutMode=10" target="_blank">
+
+<button class="ebook">Quero Receber Minhas Receitas</button>
+
+</a>
+
+</div>
+
 </div>
 
 <script>
 
 function calcular(){
 
-let custo = document.getElementById("custo").value;
+let custo = parseFloat(document.getElementById("custo").value);
 
-let preco = document.getElementById("preco").value;
+let preco = parseFloat(document.getElementById("preco").value);
 
-let quantidade = document.getElementById("quantidade").value;
+let quantidade = parseFloat(document.getElementById("quantidade").value);
 
 let lucroUnitario = preco - custo;
 
@@ -82,37 +137,17 @@ let lucroDia = lucroUnitario * quantidade;
 
 let lucroMes = lucroDia * 30;
 
-document.getElementById("resultado").innerHTML = 
-`
-Lucro por unidade: R$ ${lucroUnitario.toFixed(2)} <br>
-Lucro por dia: R$ ${lucroDia.toFixed(2)} <br>
-Lucro por mês: R$ ${lucroMes.toFixed(2)}
-`;
+document.getElementById("resultado").innerHTML =
+
+"Lucro por unidade: R$ " + lucroUnitario.toFixed(2) +
+
+"<br>Lucro por dia: R$ " + lucroDia.toFixed(2);
+
+document.getElementById("emailBox").classList.remove("hidden");
 
 }
 
 </script>
 
 </body>
-</div>
-<div style="margin-top:20px">
-
-<a href="https://pay.hotmart.com/K92944551N?checkoutMode=10" target="_blank">
-
-<button style="background:#22ff38">
-Receber Minhas Receitas
-</button>
-
-</a>
-
-</div>
-<div style="margin-top:20px">
-
-<a href="https://wa.me/557135009704" target="_blank">
-
-<button style="background:hsl(142, 70%, 49%)">
-Falar no WhatsApp
-</button>
-
-</a>
-
+</html>
