@@ -23,10 +23,25 @@ Crie um cardápio lucrativo para vender ${tipo}.
 Meta diária: R$${meta}
 Custo por unidade: R$${custo}
 
-Gere:
-- 5 pratos gourmet criativos
-- preço sugerido
-- quantas unidades vender para atingir a meta
+FORMATE A RESPOSTA EM MARKDOWN.
+
+Estrutura obrigatória:
+
+## Cardápio Lucrativo
+
+Para cada prato mostre:
+
+**Nome do prato**  
+Descrição curta  
+Preço sugerido  
+
+Depois crie uma tabela:
+
+| Prato | Preço sugerido | Unidades para atingir meta |
+
+Use apenas 5 pratos.
+
+Evite textos longos.
 `;
 
 const response = await fetch("https://api.openai.com/v1/chat/completions", {
@@ -40,6 +55,7 @@ headers: {
 
 body: JSON.stringify({
 model: "gpt-4o-mini",
+temperature: 0.7,
 messages: [
 { role: "user", content: prompt }
 ]
