@@ -6,67 +6,51 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Quanto você pode ganhar vendendo cuscuz?</title>
+<title>Comida Lucrativa AI</title>
 
 <style>
 
 body{
-font-family:Arial;
-background:#fff4e6;
+font-family: Arial;
+background:#fff5e6;
 display:flex;
 justify-content:center;
 align-items:center;
-height:100vh;
+min-height:100vh;
 margin:0;
+padding:20px;
 }
 
 .container{
 background:white;
 padding:30px;
+width:100%;
+max-width:500px;
 border-radius:12px;
-width:380px;
 box-shadow:0 10px 25px rgba(0,0,0,0.1);
 text-align:center;
 }
 
 h1{
 color:#ff7a00;
+margin-bottom:25px;
 }
 
-input{
-width:100%;
-padding:12px;
-margin-top:10px;
-border:1px solid #ddd;
-border-radius:6px;
-}
-
-button{
-width:100%;
-padding:12px;
+.card{
+background:#f7f7f7;
+padding:15px;
 margin-top:12px;
-background:#ff7a00;
-color:white;
-border:none;
-border-radius:6px;
+border-radius:8px;
 cursor:pointer;
+transition:0.2s;
 }
 
-.whatsapp{
-background:#25D366;
+.card:hover{
+background:#ececec;
 }
 
-.ebook{
-background:#e53935;
-}
-
-.hidden{
-display:none;
-}
-
-.result{
-margin-top:15px;
-font-size:18px;
+.card strong{
+font-size:16px;
 }
 
 </style>
@@ -77,114 +61,30 @@ font-size:18px;
 
 <div class="container">
 
-<h1>Calculadora de Lucro do Cuscuz</h1>
+<h1>🍲 Comida Lucrativa AI</h1>
 
-<p>Descubra quanto você pode ganhar vendendo cuscuz</p>
-
-<input type="number" id="custo" placeholder="Custo por unidade">
-
-<input type="number" id="preco" placeholder="Preço de venda">
-
-<input type="number" id="quantidade" placeholder="Quantidade vendida por dia">
-
-<button onclick="calcular()">Calcular lucro</button>
-
-<div class="result" id="resultado"></div>
-
-<div id="emailBox" class="hidden">
-
-<h3>Desbloqueie seu lucro mensal</h3>
-
-<input type="email" id="emailLead" placeholder="Digite seu email">
-
-<button onclick="enviarLead()">Ver lucro mensal</button>
-
+<div class="card" onclick="abrir('gerador-cardapio.html')">
+<strong>🍲 Gerador de Cardápio</strong>
 </div>
-<div class="result" id="lucroMensal"></div>
 
-<a href="gerador-cardapio.html">
+<div class="card" onclick="abrir('gerador-nomes.html')">
+<strong>🔥 Gerador de Nomes de Pratos</strong>
+</div>
 
-<button style="background:#6a5acd">
+<div class="card" onclick="abrir('gerador-combos.html')">
+<strong>📦 Gerador de Combos Lucrativos</strong>
+</div>
 
-Gerar Cardápio Lucrativo
-
-</button>
-
-</a>
-
-<a href="https://wa.me/5571935009704" target="_blank">
-<button class="whatsapp">Falar no WhatsApp</button>
-</a>
-
-<a href="https://pay.hotmart.com/K92944551N?off=m4vo1hl6&checkoutMode=10" target="_blank">
-<button class="ebook">Quero Aprender a Vender Cuscuz</button>
-</a>
+<div class="card" onclick="abrir('gerador-post.html')">
+<strong>📣 Gerador de Post para Instagram</strong>
+</div>
 
 </div>
 
 <script>
 
-let lucroMesGlobal = 0;
-
-function calcular(){
-
-let custo = parseFloat(document.getElementById("custo").value);
-let preco = parseFloat(document.getElementById("preco").value);
-let quantidade = parseFloat(document.getElementById("quantidade").value);
-
-if(isNaN(custo) || isNaN(preco) || isNaN(quantidade)){
-alert("Preencha todos os campos");
-return;
-}
-
-let lucroUnitario = preco - custo;
-let lucroDia = lucroUnitario * quantidade;
-
-lucroMesGlobal = lucroDia * 30;
-
-document.getElementById("resultado").innerHTML =
-"Lucro por unidade: R$ " + lucroUnitario.toFixed(2) +
-"<br>Lucro por dia: R$ " + lucroDia.toFixed(2);
-
-document.getElementById("emailBox").classList.remove("hidden");
-
-}
-
-function enviarLead(){
-
-let email = document.getElementById("emailLead").value;
-
-if(email === ""){
-alert("Digite seu email");
-return;
-}
-
-fetch("https://formspree.io/f/xkoqzqlq",{
-
-method:"POST",
-
-headers:{
-"Content-Type":"application/json",
-"Accept":"application/json"
-},
-
-body: JSON.stringify({
-email: email
-})
-
-}).then(response => {
-
-document.getElementById("lucroMensal").innerHTML =
-"<b>Lucro por mês: R$ " + lucroMesGlobal.toFixed(2) + "</b>";
-
-document.getElementById("emailBox").style.display="none";
-
-}).catch(error => {
-
-console.log(error);
-
-});
-
+function abrir(pagina){
+window.location.href = pagina;
 }
 
 </script>
