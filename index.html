@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
 
 <meta charset="UTF-8">
@@ -11,41 +12,56 @@
 
 body{
 font-family: Arial;
-background:#fff7e6;
-text-align:center;
-padding:40px;
+background:#fff4e6;
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
+margin:0;
 }
 
 .container{
 background:white;
-max-width:420px;
-margin:auto;
 padding:30px;
-border-radius:12px;
-box-shadow:0 10px 30px rgba(0,0,0,0.1);
+border-radius:14px;
+width:380px;
+box-shadow:0 10px 25px rgba(0,0,0,0.15);
+text-align:center;
 }
 
 h1{
 color:#ff7a00;
+margin-bottom:10px;
+}
+
+p{
+color:#666;
+font-size:14px;
 }
 
 input{
 width:100%;
 padding:12px;
-margin:10px 0;
+margin-top:10px;
+border-radius:6px;
+border:1px solid #ddd;
 font-size:16px;
 }
 
 button{
 width:100%;
 padding:12px;
-margin-top:10px;
+margin-top:15px;
+border:none;
+border-radius:6px;
 background:#ff7a00;
 color:white;
-border:none;
 font-size:16px;
 cursor:pointer;
-border-radius:6px;
+}
+
+button:hover{
+opacity:0.9;
 }
 
 .result{
@@ -83,45 +99,35 @@ background:#e53935;
 
 <input type="number" id="quantidade" placeholder="Quantidade vendida por dia">
 
-<button onclick="calcular()">Calcular Lucro</button>
+<button onclick="calcular()">Calcular lucro</button>
 
 <div class="result" id="resultado"></div>
 
 <div id="emailBox" class="hidden">
 
-<h3>Veja seu lucro mensal</h3>
+<h3>Desbloqueie seu lucro mensal</h3>
 
-<p>Digite seu email para desbloquear</p>
+<input type="email" id="emailLead" placeholder="Digite seu email">
 
-<form action="https://formspree.io/f/xkoqzqlq" method="POST">
-
-<input type="email" name="email" placeholder="Seu email" required>
-
-<button type="submit">Ver resultado</button>
-
-</form>
+<button onclick="enviarLead()">Ver lucro mensal</button>
 
 </div>
 
-<div style="margin-top:20px">
+<div class="result" id="lucroMensal"></div>
 
 <a href="https://wa.me/5571935009704" target="_blank">
-
 <button class="whatsapp">Falar no WhatsApp</button>
-
 </a>
 
 <a href="https://pay.hotmart.com/K92944551N?checkoutMode=10" target="_blank">
-
 <button class="ebook">Quero Receber Minhas Receitas</button>
-
 </a>
-
-</div>
 
 </div>
 
 <script>
+
+let lucroMesGlobal = 0;
 
 function calcular(){
 
@@ -131,11 +137,19 @@ let preco = parseFloat(document.getElementById("preco").value);
 
 let quantidade = parseFloat(document.getElementById("quantidade").value);
 
+if(isNaN(custo) || isNaN(preco) || isNaN(quantidade)){
+
+alert("Preencha todos os campos");
+
+return;
+
+}
+
 let lucroUnitario = preco - custo;
 
 let lucroDia = lucroUnitario * quantidade;
 
-let lucroMes = lucroDia * 30;
+lucroMesGlobal = lucroDia * 30;
 
 document.getElementById("resultado").innerHTML =
 
@@ -147,7 +161,40 @@ document.getElementById("emailBox").classList.remove("hidden");
 
 }
 
+function enviarLead(){
+
+let email = document.getElementById("emailLead").value;
+
+if(email == ""){
+
+alert("Digite seu email");
+
+return;
+
+}
+
+fetch("https://formspree.io/f/xkoqzqlq",{
+
+method:"POST",
+
+headers:{
+"Content-Type":"application/json"
+},
+
+body: JSON.stringify({
+email: email
+})
+
+});
+
+document.getElementById("lucroMensal").innerHTML =
+
+"<b>Lucro por mês: R$ " + lucroMesGlobal.toFixed(2) + "</b>";
+
+}
+
 </script>
 
 </body>
+
 </html>
