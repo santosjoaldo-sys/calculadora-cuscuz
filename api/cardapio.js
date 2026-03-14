@@ -1,187 +1,88 @@
-<!DOCTYPE html>
-<html lang="pt-br">
+export default async function handler(req, res) {
 
-<head>
+try {
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Gerador de Cardápio Lucrativo</title>
-
-<style>
-
-body{
-font-family: Arial;
-background:#fff5e6;
-display:flex;
-justify-content:center;
-align-items:center;
-height:100vh;
-margin:0;
+if (req.method !== "POST") {
+return res.status(200).json({
+resultado: "API funcionando 🚀"
+});
 }
 
-.container{
-background:white;
-padding:30px;
-width:450px;
-border-radius:12px;
-box-shadow:0 10px 25px rgba(0,0,0,0.1);
-text-align:center;
+// garantir body
+const body = req.body || {};
+
+const tipo = body.tipo || "";
+const meta = body.meta || "";
+const custo = body.custo || "";
+
+if (!tipo || !meta || !custo) {
+return res.status(400).json({
+resultado: "Dados incompletos enviados."
+});
 }
 
-h1{
-color:#ff7a00;
-}
+const prompt = `
+Crie um cardápio lucrativo para vender ${tipo}.
 
-input, select{
-width:100%;
-padding:12px;
-margin-top:10px;
-border:1px solid #ddd;
-border-radius:6px;
-}
+Meta diária: R$${meta}
+Custo por unidade: R$${custo}
 
-button{
-width:100%;
-padding:12px;
-margin-top:15px;
-background:#6a5acd;
-color:white;
-border:none;
-cursor:pointer;
-font-size:16px;
-}
+Formate em Markdown com:
 
-button:hover{
-opacity:0.9;
-}
+## Cardápio Lucrativo
 
-.result{
-margin-top:25px;
-text-align:left;
-font-size:15px;
-line-height:1.5;
-}
+Para cada prato:
+Nome
+Descrição
+Preço sugerido
 
-.result h2{
-color:#ff7a00;
-margin-top:15px;
-}
+Depois crie uma tabela:
 
-.result strong{
-color:#333;
-}
+| Prato | Preço | Unidades |
+`;
 
-.result table{
-border-collapse:collapse;
-width:100%;
-margin-top:20px;
-}
+const response = await fetch("https://api.openai.com/v1/chat/completions", {
 
-.result table th{
-background:#ff7a00;
-color:white;
-padding:8px;
-}
+method: "POST",
 
-.result table td{
-border:1px solid #ddd;
-padding:8px;
-}
-
-.loading{
-color:#666;
-font-style:italic;
-}
-
-</style>
-
-</head>
-
-<body>
-
-<div class="container">
-
-<h1>Gerador de Cardápio Lucrativo</h1>
-
-<select id="tipo">
-
-<option value="cuscuz gourmet">Cuscuz Gourmet</option>
-<option value="bolo no pote">Bolo no Pote</option>
-<option value="pastel">Pastel</option>
-
-</select>
-
-<input type="number" id="meta" placeholder="Quanto quer ganhar por dia">
-
-<input type="number" id="custo" placeholder="Custo por unidade">
-
-<button onclick="gerarCardapio()">Gerar Cardápio</button>
-
-<div class="result" id="resultado"></div>
-
-</div>
-
-
-<!-- biblioteca para converter Markdown em HTML -->
-<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-
-
-<script>
-
-async function gerarCardapio(){
-
-let tipo = document.getElementById("tipo").value;
-let meta = document.getElementById("meta").value;
-let custo = document.getElementById("custo").value;
-
-if(!meta || !custo){
-
-alert("Preencha todos os campos");
-
-return;
-
-}
-
-document.getElementById("resultado").innerHTML =
-"<span class='loading'>Gerando cardápio com IA...</span>";
-
-try{
-
-const response = await fetch("/api/cardapio",{
-
-method:"POST",
-
-headers:{
-"Content-Type":"application/json"
+headers: {
+"Content-Type": "application/json",
+"Authorization": `Bearer ${process.env.OPENAI_API_KEY}`
 },
 
 body: JSON.stringify({
-tipo: tipo,
-meta: meta,
-custo: custo
+model: "gpt-4o-mini",
+messages: [
+{ role: "user", content: prompt }
+]
 })
 
 });
 
 const data = await response.json();
 
-document.getElementById("resultado").innerHTML =
-marked.parse(data.resultado);
+if (!response.ok) {
+return res.status(500).json({
+resultado: "Erro OpenAI: " + JSON.stringify(data)
+});
+}
+
+const texto = data?.choices?.[0]?.message?.content;
+
+res.status(200).json({
+resultado: texto || "Erro ao gerar cardápio."
+});
 
 }
 
-catch(error){
+catch (error) {
 
-document.getElementById("resultado").innerHTML =
-"Erro ao gerar cardápio.";
+console.error(error);
+
+res.status(500).json({
+resultado: "Erro interno da API."
+});
 
 }
 
 }
-
-</script>
-
-</body>
-
-</html>
