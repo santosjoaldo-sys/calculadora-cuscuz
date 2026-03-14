@@ -8,7 +8,14 @@ resultado: "API funcionando 🚀"
 });
 }
 
-const { tipo, meta, custo } = req.body;
+// garante que o body exista
+const { tipo, meta, custo } = req.body || {};
+
+if (!tipo || !meta || !custo) {
+return res.status(400).json({
+resultado: "Dados incompletos enviados."
+});
+}
 
 const prompt = `
 Crie um cardápio lucrativo para vender ${tipo}.
@@ -17,24 +24,24 @@ Meta diária: R$${meta}
 Custo por unidade: R$${custo}
 
 Gere:
-5 pratos gourmet criativos
-preço sugerido
-quantas unidades vender para atingir a meta
+- 5 pratos gourmet criativos
+- preço sugerido
+- quantas unidades vender para atingir a meta
 `;
 
-const response = await fetch("https://api.openai.com/v1/chat/completions",{
+const response = await fetch("https://api.openai.com/v1/chat/completions", {
 
-method:"POST",
+method: "POST",
 
-headers:{
-"Content-Type":"application/json",
-"Authorization":`Bearer ${process.env.OPENAI_API_KEY}`
+headers: {
+"Content-Type": "application/json",
+"Authorization": `Bearer ${process.env.OPENAI_API_KEY}`
 },
 
 body: JSON.stringify({
-model:"gpt-4o-mini",
-messages:[
-{role:"user",content:prompt}
+model: "gpt-4o-mini",
+messages: [
+{ role: "user", content: prompt }
 ]
 })
 
@@ -42,7 +49,12 @@ messages:[
 
 const data = await response.json();
 
-console.log(data);
+// se a OpenAI retornar erro
+if (!response.ok) {
+return res.status(500).json({
+resultado: "Erro da OpenAI: " + JSON.stringify(data)
+});
+}
 
 const resultado =
 data?.choices?.[0]?.message?.content ||
@@ -54,10 +66,12 @@ resultado: resultado
 
 }
 
-catch(error){
+catch (error) {
+
+console.error(error);
 
 res.status(500).json({
-resultado:"Erro interno na API"
+resultado: "Erro interno: " + error.message
 });
 
 }
