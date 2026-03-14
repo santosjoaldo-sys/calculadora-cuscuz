@@ -1,206 +1,35 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-
-<head>
-
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Gerador de Cardápio Lucrativo</title>
-
-<style>
-
-body{
-font-family:Arial;
-background:#fff5e6;
-display:flex;
-justify-content:center;
-align-items:center;
-height:100vh;
-margin:0;
-}
-
-.container{
-background:white;
-padding:30px;
-width:420px;
-border-radius:12px;
-box-shadow:0 10px 25px rgba(0,0,0,0.1);
-text-align:center;
-}
-
-h1{
-color:#ff7a00;
-}
-
-input, select{
-width:100%;
-padding:12px;
-margin-top:10px;
-border:1px solid #ddd;
-border-radius:6px;
-}
-
-button{
-width:100%;
-padding:12px;
-margin-top:15px;
-background:#ff7a00;
-color:white;
-border:none;
-cursor:pointer;
-font-size:16px;
-}
-
-.result{
-margin-top:20px;
-text-align:left;
-font-size:16px;
-}
-
-</style>
-
-</head>
-
-<body>
-
-<div class="container">
-
-<h1>Gerador de Cardápio Lucrativo</h1>
-
-<p>Descubra o que vender para ganhar dinheiro</p>
-
-<select id="tipo">
-
-<option value="cuscuz">Cuscuz Gourmet</option>
-<option value="bolo">Bolo no pote</option>
-<option value="pastel">Pastel</option>
-
-</select>
-
-<input type="number" id="meta" placeholder="Quanto quer ganhar por dia">
-
-<input type="number" id="custo" placeholder="Custo por unidade">
-
-<button onclick="gerarCardapio()">Gerar Cardápio</button>
-
-<div class="result" id="resultado"></div>
-
-</div>
-
 <script>
 
-function gerarCardapio(){
+async function gerar(){
 
 let tipo = document.getElementById("tipo").value;
-
-let meta = parseFloat(document.getElementById("meta").value);
-
-let custo = parseFloat(document.getElementById("custo").value);
-
-if(isNaN(meta) || isNaN(custo)){
-
-alert("Preencha todos os campos");
-
-return;
-
-}
-
-let preco = custo * 3;
-
-let lucro = preco - custo;
-
-let unidades = Math.ceil(meta / lucro);
-
-let pratos = [];
-
-if(tipo == "cuscuz"){
-
-pratos = [
-
-"Cuscuz Ouro do Nordeste",
-
-"Cuscuz Sertão Cremoso",
-
-"Cuscuz Carne Seca Premium",
-
-"Cuscuz Frango Cremoso Gourmet",
-
-"Cuscuz Nordestino Especial"
-
-];
-
-}
-
-if(tipo == "bolo"){
-
-pratos = [
-
-"Bolo no Pote Chocolate Supremo",
-
-"Bolo no Pote Ninho Cremoso",
-
-"Bolo no Pote Morango Premium",
-
-"Bolo no Pote Brigadeiro Gourmet",
-
-"Bolo no Pote Leite Condensado"
-
-];
-
-}
-
-if(tipo == "pastel"){
-
-pratos = [
-
-"Pastel Crocante de Carne Especial",
-
-"Pastel Cremoso de Frango",
-
-"Pastel Supremo de Queijo",
-
-"Pastel Carne com Catupiry",
-
-"Pastel Gourmet do Chef"
-
-];
-
-}
-
-let lista = pratos.map(p => "🔥 " + p).join("<br>");
+let meta = document.getElementById("meta").value;
+let custo = document.getElementById("custo").value;
 
 document.getElementById("resultado").innerHTML =
+"Gerando cardápio com IA...";
 
-`
-<b>Cardápio sugerido</b><br><br>
+const response = await fetch("/api/cardapio",{
 
-${lista}
+method:"POST",
 
-<br><br>
+headers:{
+"Content-Type":"application/json"
+},
 
-Preço sugerido: R$${preco.toFixed(2)}
+body: JSON.stringify({
+tipo: tipo,
+meta: meta,
+custo: custo
+})
 
-<br><br>
+});
 
-Para ganhar R$${meta} por dia você precisa vender:
+const data = await response.json();
 
-<b>${unidades} unidades</b>
-`;
+document.getElementById("resultado").innerHTML =
+data.resultado;
 
 }
 
 </script>
-
-</body>
-
-</html>
-<a href="index.html">
-
-<button style="background:#444">
-
-Calcular Lucro
-
-</button>
-
-</a>
