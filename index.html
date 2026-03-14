@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<title>Calculadora de Lucro do Cuscuz</title>
+
+<style>
+body{
+font-family: Arial;
+background:#fff8e8;
+text-align:center;
+padding:40px;
+}
+
+.container{
+background:white;
+padding:30px;
+border-radius:12px;
+max-width:400px;
+margin:auto;
+box-shadow:0 5px 20px rgba(0,0,0,0.1);
+}
+
+input{
+width:100%;
+padding:10px;
+margin:10px 0;
+font-size:16px;
+}
+
+button{
+background:#ff9800;
+border:none;
+padding:12px;
+color:white;
+font-size:16px;
+width:100%;
+cursor:pointer;
+}
+
+.result{
+margin-top:20px;
+font-size:18px;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>Calculadora de Lucro do Cuscuz</h2>
+
+<p>Descubra quanto você pode ganhar.</p>
+
+<input type="number" id="custo" placeholder="Custo por unidade">
+
+<input type="number" id="preco" placeholder="Preço de venda">
+
+<input type="number" id="quantidade" placeholder="Quantidade vendida por dia">
+
+<button onclick="calcular()">Calcular Lucro</button>
+
+<div class="result" id="resultado"></div>
+
+</div>
+
+<script>
+
+function calcular(){
+
+let custo = document.getElementById("custo").value;
+
+let preco = document.getElementById("preco").value;
+
+let quantidade = document.getElementById("quantidade").value;
+
+let lucroUnitario = preco - custo;
+
+let lucroDia = lucroUnitario * quantidade;
+
+let lucroMes = lucroDia * 30;
+
+document.getElementById("resultado").innerHTML = 
+`
+Lucro por unidade: R$ ${lucroUnitario.toFixed(2)} <br>
+Lucro por dia: R$ ${lucroDia.toFixed(2)} <br>
+Lucro por mês: R$ ${lucroMes.toFixed(2)}
+`;
+
+}
+
+</script>
+
+</body>
+</html>
