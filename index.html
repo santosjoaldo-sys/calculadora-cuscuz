@@ -11,7 +11,7 @@
 <style>
 
 body{
-font-family: Arial;
+font-family:Arial;
 background:#fff4e6;
 display:flex;
 justify-content:center;
@@ -23,54 +23,33 @@ margin:0;
 .container{
 background:white;
 padding:30px;
-border-radius:14px;
+border-radius:12px;
 width:380px;
-box-shadow:0 10px 25px rgba(0,0,0,0.15);
+box-shadow:0 10px 25px rgba(0,0,0,0.1);
 text-align:center;
 }
 
 h1{
 color:#ff7a00;
-margin-bottom:10px;
-}
-
-p{
-color:#666;
-font-size:14px;
 }
 
 input{
 width:100%;
 padding:12px;
 margin-top:10px;
-border-radius:6px;
 border:1px solid #ddd;
-font-size:16px;
+border-radius:6px;
 }
 
 button{
 width:100%;
 padding:12px;
-margin-top:15px;
-border:none;
-border-radius:6px;
+margin-top:12px;
 background:#ff7a00;
 color:white;
-font-size:16px;
+border:none;
+border-radius:6px;
 cursor:pointer;
-}
-
-button:hover{
-opacity:0.9;
-}
-
-.result{
-margin-top:20px;
-font-size:18px;
-}
-
-.hidden{
-display:none;
 }
 
 .whatsapp{
@@ -79,6 +58,15 @@ background:#25D366;
 
 .ebook{
 background:#e53935;
+}
+
+.hidden{
+display:none;
+}
+
+.result{
+margin-top:15px;
+font-size:18px;
 }
 
 </style>
@@ -91,7 +79,7 @@ background:#e53935;
 
 <h1>Calculadora de Lucro do Cuscuz</h1>
 
-<p>Descubra quanto você pode ganhar vendendo cuscuz.</p>
+<p>Descubra quanto você pode ganhar vendendo cuscuz</p>
 
 <input type="number" id="custo" placeholder="Custo por unidade">
 
@@ -120,7 +108,7 @@ background:#e53935;
 </a>
 
 <a href="https://pay.hotmart.com/K92944551N?checkoutMode=10" target="_blank">
-<button class="ebook">Quero Receber Minhas Receitas</button>
+<button class="ebook">Quero muito as Receitas de Cuscuz Gourmet</button>
 </a>
 
 </div>
@@ -132,29 +120,21 @@ let lucroMesGlobal = 0;
 function calcular(){
 
 let custo = parseFloat(document.getElementById("custo").value);
-
 let preco = parseFloat(document.getElementById("preco").value);
-
 let quantidade = parseFloat(document.getElementById("quantidade").value);
 
 if(isNaN(custo) || isNaN(preco) || isNaN(quantidade)){
-
 alert("Preencha todos os campos");
-
 return;
-
 }
 
 let lucroUnitario = preco - custo;
-
 let lucroDia = lucroUnitario * quantidade;
 
 lucroMesGlobal = lucroDia * 30;
 
 document.getElementById("resultado").innerHTML =
-
 "Lucro por unidade: R$ " + lucroUnitario.toFixed(2) +
-
 "<br>Lucro por dia: R$ " + lucroDia.toFixed(2);
 
 document.getElementById("emailBox").classList.remove("hidden");
@@ -165,12 +145,9 @@ function enviarLead(){
 
 let email = document.getElementById("emailLead").value;
 
-if(email == ""){
-
+if(email === ""){
 alert("Digite seu email");
-
 return;
-
 }
 
 fetch("https://formspree.io/f/xkoqzqlq",{
@@ -178,18 +155,26 @@ fetch("https://formspree.io/f/xkoqzqlq",{
 method:"POST",
 
 headers:{
-"Content-Type":"application/json"
+"Content-Type":"application/json",
+"Accept":"application/json"
 },
 
 body: JSON.stringify({
 email: email
 })
 
-});
+}).then(response => {
 
 document.getElementById("lucroMensal").innerHTML =
-
 "<b>Lucro por mês: R$ " + lucroMesGlobal.toFixed(2) + "</b>";
+
+document.getElementById("emailBox").style.display="none";
+
+}).catch(error => {
+
+console.log(error);
+
+});
 
 }
 
