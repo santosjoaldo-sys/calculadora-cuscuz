@@ -84,40 +84,41 @@ font-size:16px;
 
 <script>
 
-function gerarCardapio(){
+<script>
+
+async function gerarCardapio(){
 
 let tipo = document.getElementById("tipo").value;
-let meta = parseFloat(document.getElementById("meta").value);
-let custo = parseFloat(document.getElementById("custo").value);
-
-if(isNaN(meta) || isNaN(custo)){
-alert("Preencha todos os campos");
-return;
-}
-
-let preco = custo * 3;
-let lucro = preco - custo;
-let unidades = Math.ceil(meta / lucro);
-
-let pratos = [
-"Cuscuz Carne Seca Premium",
-"Cuscuz Frango Cremoso",
-"Cuscuz Calabresa Especial",
-"Cuscuz Nordestino Gourmet",
-"Cuscuz Sertão Cremoso"
-];
+let meta = document.getElementById("meta").value;
+let custo = document.getElementById("custo").value;
 
 document.getElementById("resultado").innerHTML =
+"Gerando cardápio com IA...";
 
-"<b>Cardápio sugerido</b><br><br>"+
+const response = await fetch("/api/cardapio",{
 
-pratos.join("<br>")+"<br><br>"+
+method:"POST",
 
-"Preço sugerido: R$"+preco.toFixed(2)+
+headers:{
+"Content-Type":"application/json"
+},
 
-"<br><br>Para ganhar R$"+meta+" por dia venda <b>"+unidades+" unidades</b>";
+body: JSON.stringify({
+tipo: tipo,
+meta: meta,
+custo: custo
+})
+
+});
+
+const data = await response.json();
+
+document.getElementById("resultado").innerHTML =
+data.resultado;
 
 }
+
+</script>
 
 </script>
 
