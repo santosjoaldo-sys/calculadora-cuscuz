@@ -19,35 +19,42 @@ resultado: "Dados incompletos enviados."
 }
 
 const prompt = `
-Você é um especialista em negócios de comida de rua.
+Você ajuda pessoas simples a ganhar dinheiro vendendo comida.
 
 Crie um cardápio lucrativo para vender ${tipo}.
 
 Meta diária: R$${meta}
 Custo por unidade: R$${custo}
 
-REGRAS:
+REGRAS IMPORTANTES:
 
-1. Crie exatamente 5 pratos.
-2. Use nomes criativos e vendáveis.
-3. Descrição curta (máximo 1 linha).
-4. Sugira preço com margem saudável.
+- Use linguagem simples
+- Nada de textos longos
+- Resposta fácil de entender
+- Exatamente 5 pratos
 
-FORMATO OBRIGATÓRIO EM MARKDOWN:
+FORMATO DA RESPOSTA:
 
-## Cardápio Lucrativo
+## 🍲 Cardápio Lucrativo
 
-### Nome do prato
-Descrição curta  
-Preço sugerido: R$
+Nome do prato  
+💰 Preço sugerido: R$
 
 (repita para os 5 pratos)
 
-Depois crie esta tabela:
+Depois mostre:
 
-| Prato | Preço | Unidades necessárias |
+## 📊 Quantidade para bater a meta
 
-Calcule quantas unidades precisam ser vendidas para atingir aproximadamente R$${meta}.
+| Prato | Preço | Quantidade |
+
+Calcule quantas unidades precisam ser vendidas para chegar perto de R$${meta}.
+
+Depois finalize com:
+
+## 🎯 Resumo rápido
+
+Explique em 2 ou 3 linhas qual prato é mais fácil vender para atingir a meta.
 `;
 
 const response = await fetch("https://api.openai.com/v1/chat/completions", {
@@ -56,7 +63,7 @@ method: "POST",
 
 headers: {
 "Content-Type": "application/json",
-"Authorization": `Bearer ${process.env.OPENAI_API_KEY}`
+"Authorization": \`Bearer \${process.env.OPENAI_API_KEY}\`
 },
 
 body: JSON.stringify({
