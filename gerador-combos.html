@@ -5,7 +5,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Gerador de Nomes</title>
+<title>Combos Lucrativos</title>
 
 <style>
 
@@ -53,11 +53,11 @@ text-align:left;
 
 <div class="container">
 
-<h2>🔥 Gerador de Nomes de Pratos</h2>
+<h2>📦 Gerador de Combos Lucrativos</h2>
 
-<input id="produto" placeholder="Ex: Cuscuz Gourmet" style="width:100%;padding:10px">
+<input id="produto" placeholder="Ex: Cuscuz" style="width:100%;padding:10px">
 
-<button onclick="gerar()">Gerar Nomes</button>
+<button onclick="gerar()">Gerar Combos</button>
 
 <div class="result" id="resultado"></div>
 
@@ -69,7 +69,7 @@ async function gerar(){
 
 const produto=document.getElementById("produto").value;
 
-const res=await fetch("/api/nomes",{
+const res=await fetch("/api/combos",{
 method:"POST",
 headers:{
 "Content-Type":"application/json"
