@@ -1,6 +1,10 @@
 export default async function handler(req, res) {
   try {
 
+function voltar(){
+window.location.href = "index.html";
+}
+    
     // permitir teste direto no navegador
     if (req.method !== "POST") {
       return res.status(200).json({
