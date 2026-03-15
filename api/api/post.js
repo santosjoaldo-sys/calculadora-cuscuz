@@ -1,18 +1,16 @@
-
 export default async function handler(req, res) {
 
 try {
+
+if(req.method !== "POST"){
+return res.status(200).json({resultado:"API post funcionando"});
+}
 
 const { produto } = req.body || {};
 
 const prompt = `
 Crie um post curto para Instagram vendendo ${produto}.
-
-Inclua:
-- frase chamativa
-- emojis
-- call to action
-- hashtags
+Inclua emojis e hashtags.
 `;
 
 const response = await fetch("https://api.openai.com/v1/chat/completions",{
@@ -26,7 +24,6 @@ headers:{
 
 body: JSON.stringify({
 model:"gpt-4o-mini",
-temperature:0.8,
 messages:[
 {role:"user",content:prompt}
 ]
