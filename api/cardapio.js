@@ -7,10 +7,6 @@ export default async function handler(req, res) {
         resultado: "API funcionando 🚀"
       });
     }
-
-    function voltar(){
-window.location.href = "index.html";
-}
     
     const { tipo, meta, custo } = req.body || {};
 
