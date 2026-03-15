@@ -8,6 +8,10 @@ export default async function handler(req, res) {
       });
     }
 
+    function voltar(){
+window.location.href = "index.html";
+}
+    
     const { tipo, meta, custo } = req.body || {};
 
     if (!tipo || !meta || !custo) {
