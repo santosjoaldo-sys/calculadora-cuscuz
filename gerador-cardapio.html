@@ -145,6 +145,19 @@ Para ganhar R$${meta} por dia venda ${unidades} unidades.
 
 </script>
 
+function voltarMenu(){
+window.location.href = "index.html";
+}
+
+function copiarResultado(){
+
+const texto = document.getElementById("resultado").innerText;
+
+navigator.clipboard.writeText(texto);
+
+alert("Resultado copiado!");
+}
+
 </body>
 
 </html>
