@@ -5,63 +5,48 @@
 
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-<button onclick="voltar()" class="voltar">⬅ Voltar ao Menu</button>
-  
+
 <title>Gerador de Cardápio Lucrativo</title>
 
 <style>
 
 body{
-font-family: Arial;
-background:#fff5e6;
+font-family:Arial;
+background:#fff7e6;
 display:flex;
 justify-content:center;
 align-items:center;
 height:100vh;
-margin:0;
 }
 
 .container{
 background:white;
 padding:30px;
-width:420px;
 border-radius:12px;
+width:380px;
 box-shadow:0 10px 25px rgba(0,0,0,0.1);
 text-align:center;
 }
 
-h1{
-color:#ff7a00;
-}
-
 input, select{
 width:100%;
-padding:12px;
+padding:10px;
 margin-top:10px;
-border:1px solid #ddd;
-border-radius:6px;
 }
 
 button{
 width:100%;
 padding:12px;
 margin-top:15px;
-background:#6a5acd;
+background:#ff7a00;
 color:white;
 border:none;
 cursor:pointer;
-font-size:16px;
 }
 
 .result{
 margin-top:20px;
 text-align:left;
-font-size:16px;
-}
-
-.loading{
-color:#666;
 }
 
 </style>
@@ -72,12 +57,12 @@ color:#666;
 
 <div class="container">
 
-<h1>Gerador de Cardápio Lucrativo</h1>
+<h2>Gerador de Cardápio Lucrativo</h2>
 
-<select id="tipo">
+<select id="comida">
 
-<option value="cuscuz gourmet">Cuscuz Gourmet</option>
-<option value="bolo no pote">Bolo no Pote</option>
+<option value="cuscuz">Cuscuz Gourmet</option>
+<option value="bolo">Bolo no pote</option>
 <option value="pastel">Pastel</option>
 
 </select>
@@ -86,7 +71,7 @@ color:#666;
 
 <input type="number" id="custo" placeholder="Custo por unidade">
 
-<button onclick="gerarCardapio()">Gerar Cardápio</button>
+<button onclick="gerar()">Gerar Cardápio</button>
 
 <div class="result" id="resultado"></div>
 
@@ -94,54 +79,63 @@ color:#666;
 
 <script>
 
-async function gerarCardapio(){
+function gerar(){
 
-let tipo = document.getElementById("tipo").value;
+let comida = document.getElementById("comida").value;
 let meta = document.getElementById("meta").value;
 let custo = document.getElementById("custo").value;
 
-if(!meta || !custo){
+let preco = custo * 3;
 
-alert("Preencha todos os campos");
+let unidades = Math.ceil(meta / (preco - custo));
 
-return;
+let cardapio = "";
+
+if(comida == "cuscuz"){
+
+cardapio = `
+Cuscuz carne seca<br>
+Cuscuz frango cremoso<br>
+Cuscuz calabresa queijo
+`;
+
+}
+
+if(comida == "bolo"){
+
+cardapio = `
+Bolo no pote chocolate<br>
+Bolo no pote ninho<br>
+Bolo no pote morango
+`;
+
+}
+
+if(comida == "pastel"){
+
+cardapio = `
+Pastel carne<br>
+Pastel frango<br>
+Pastel queijo
+`;
 
 }
 
 document.getElementById("resultado").innerHTML =
-"<span class='loading'>Gerando cardápio inteligente...</span>";
 
-try{
+`<b>Cardápio sugerido</b><br><br>
 
-const response = await fetch("/api/cardapio",{
+${cardapio}
 
-method:"POST",
+<br><br>
 
-headers:{
-"Content-Type":"application/json"
-},
+Preço sugerido: R$${preco.toFixed(2)}
 
-body: JSON.stringify({
-tipo: tipo,
-meta: meta,
-custo: custo
-})
+<br>
 
-});
+Para ganhar R$${meta} por dia venda ${unidades} unidades.
 
-const data = await response.json();
-
-document.getElementById("resultado").innerHTML =
-data.resultado;
-
-}
-
-catch(error){
-
-document.getElementById("resultado").innerHTML =
-"Erro ao gerar cardápio. Verifique a API.";
-
-}
+`;
 
 }
 
