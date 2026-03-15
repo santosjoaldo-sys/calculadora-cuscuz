@@ -1,1 +1,90 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
 
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Gerador de Nomes</title>
+
+<style>
+
+body{
+font-family:Arial;
+background:#fff5e6;
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
+margin:0;
+}
+
+.container{
+background:white;
+padding:25px;
+width:90%;
+max-width:450px;
+border-radius:12px;
+box-shadow:0 10px 20px rgba(0,0,0,0.1);
+text-align:center;
+}
+
+button{
+width:100%;
+padding:12px;
+margin-top:10px;
+background:#ff7a00;
+color:white;
+border:none;
+border-radius:6px;
+cursor:pointer;
+}
+
+.result{
+margin-top:20px;
+text-align:left;
+white-space:pre-line;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>🔥 Gerador de Nomes de Pratos</h2>
+
+<input id="produto" placeholder="Ex: Cuscuz Gourmet" style="width:100%;padding:10px">
+
+<button onclick="gerar()">Gerar Nomes</button>
+
+<div class="result" id="resultado"></div>
+
+</div>
+
+<script>
+
+async function gerar(){
+
+const produto=document.getElementById("produto").value;
+
+const res=await fetch("/api/nomes",{
+method:"POST",
+headers:{
+"Content-Type":"application/json"
+},
+body:JSON.stringify({produto})
+});
+
+const data=await res.json();
+
+document.getElementById("resultado").innerText=data.resultado;
+
+}
+
+</script>
+
+</body>
+</html>
