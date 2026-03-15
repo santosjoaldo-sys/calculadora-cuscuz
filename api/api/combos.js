@@ -1,22 +1,16 @@
-
 export default async function handler(req, res) {
 
 try {
+
+if(req.method !== "POST"){
+return res.status(200).json({resultado:"API combos funcionando"});
+}
 
 const { produto } = req.body || {};
 
 const prompt = `
 Crie 5 combos lucrativos usando ${produto}.
-
-Exemplo:
-
-Combo Café Nordestino
-Cuscuz + Café + Bolo
-
-Combo Família
-3 Cuscuz + 2 Refrigerantes
-
-Liste os combos de forma simples.
+Liste de forma simples.
 `;
 
 const response = await fetch("https://api.openai.com/v1/chat/completions",{
@@ -30,7 +24,6 @@ headers:{
 
 body: JSON.stringify({
 model:"gpt-4o-mini",
-temperature:0.7,
 messages:[
 {role:"user",content:prompt}
 ]
