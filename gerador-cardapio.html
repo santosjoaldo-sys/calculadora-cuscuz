@@ -18,12 +18,13 @@ justify-content:center;
 align-items:center;
 min-height:100vh;
 margin:0;
+padding:20px;
 }
 
 .container{
 background:white;
 padding:30px;
-width:90%;
+width:100%;
 max-width:420px;
 border-radius:12px;
 box-shadow:0 10px 20px rgba(0,0,0,0.1);
@@ -51,6 +52,7 @@ color:white;
 border:none;
 border-radius:6px;
 cursor:pointer;
+font-size:15px;
 }
 
 .result{
@@ -90,6 +92,14 @@ width:auto;
 background:#6a5acd;
 }
 
+.whatsapp{
+background:#25D366;
+}
+
+.limpar{
+background:#888;
+}
+
 </style>
 
 </head>
@@ -118,6 +128,10 @@ background:#6a5acd;
 <div class="result" id="resultado"></div>
 
 <button class="copiar" onclick="copiarResultado()">📋 Copiar Resultado</button>
+
+<button class="whatsapp" onclick="enviarWhatsapp()">📲 Enviar para WhatsApp</button>
+
+<button class="limpar" onclick="limparResultado()">🗑 Limpar</button>
 
 </div>
 
@@ -152,9 +166,7 @@ let icone = "🍲";
 const texto = linha.toLowerCase();
 
 if(texto.includes("preço")) icone = "💰";
-
 if(texto.includes("unidades")) icone = "📊";
-
 if(texto.includes("meta")) icone = "🎯";
 
 html += `<div class="card">${icone} ${linha}</div>`;
@@ -176,6 +188,22 @@ const texto = document.getElementById("resultado").innerText;
 navigator.clipboard.writeText(texto);
 
 alert("Resultado copiado!");
+
+}
+
+function enviarWhatsapp(){
+
+const texto = document.getElementById("resultado").innerText;
+
+const url = "https://wa.me/?text=" + encodeURIComponent(texto);
+
+window.open(url);
+
+}
+
+function limparResultado(){
+
+document.getElementById("resultado").innerHTML = "";
 
 }
 
