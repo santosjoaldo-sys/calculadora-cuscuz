@@ -81,19 +81,21 @@ text-align:left;
 
 <script>
 
-function gerar(){
+function voltarMenu(){
+window.location.href = "index.html";
+}
 
-let comida = document.getElementById("comida").value;
-let meta = document.getElementById("meta").value;
-let custo = document.getElementById("custo").value;
+function copiarResultado(){
 
-let preco = custo * 3;
+const texto = document.getElementById("resultado").innerText;
 
-let unidades = Math.ceil(meta / (preco - custo));
+navigator.clipboard.writeText(texto);
 
-let cardapio = "";
+alert("Resultado copiado!");
 
-if(comida == "cuscuz"){
+}
+
+</script>
 
 cardapio = `
 Cuscuz carne seca<br>
