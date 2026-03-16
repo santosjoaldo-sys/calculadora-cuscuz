@@ -6,7 +6,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Gerador de Post Instagram</title>
+<title>Gerador de Post para Instagram</title>
 
 <style>
 
@@ -18,12 +18,13 @@ justify-content:center;
 align-items:center;
 min-height:100vh;
 margin:0;
+padding:20px;
 }
 
 .container{
 background:white;
 padding:30px;
-width:90%;
+width:100%;
 max-width:420px;
 border-radius:12px;
 box-shadow:0 10px 20px rgba(0,0,0,0.1);
@@ -51,15 +52,27 @@ color:white;
 border:none;
 border-radius:6px;
 cursor:pointer;
+font-size:15px;
 }
 
 .result{
 margin-top:20px;
+}
+
+.card{
+
 background:#f7f7f7;
-padding:15px;
+
+padding:12px;
+
+margin-bottom:10px;
+
 border-radius:8px;
-line-height:1.6;
-white-space:pre-line;
+
+box-shadow:0 3px 8px rgba(0,0,0,0.1);
+
+font-size:15px;
+
 }
 
 .voltar{
@@ -77,6 +90,14 @@ width:auto;
 
 .copiar{
 background:#6a5acd;
+}
+
+.whatsapp{
+background:#25D366;
+}
+
+.limpar{
+background:#888;
 }
 
 </style>
@@ -99,6 +120,10 @@ background:#6a5acd;
 
 <button class="copiar" onclick="copiarResultado()">📋 Copiar Resultado</button>
 
+<button class="whatsapp" onclick="enviarWhatsapp()">📲 Enviar para WhatsApp</button>
+
+<button class="limpar" onclick="limparResultado()">🗑 Limpar</button>
+
 </div>
 
 <script>
@@ -117,7 +142,19 @@ body:JSON.stringify({produto})
 
 const data = await res.json();
 
-document.getElementById("resultado").innerText = data.resultado;
+const linhas = data.resultado.split("\n");
+
+let html = "";
+
+linhas.forEach(linha => {
+
+if(linha.trim() === "") return;
+
+html += `<div class="card">📣 ${linha}</div>`;
+
+});
+
+document.getElementById("resultado").innerHTML = html;
 
 }
 
@@ -132,6 +169,22 @@ const texto = document.getElementById("resultado").innerText;
 navigator.clipboard.writeText(texto);
 
 alert("Resultado copiado!");
+
+}
+
+function enviarWhatsapp(){
+
+const texto = document.getElementById("resultado").innerText;
+
+const url = "https://wa.me/?text=" + encodeURIComponent(texto);
+
+window.open(url);
+
+}
+
+function limparResultado(){
+
+document.getElementById("resultado").innerHTML = "";
 
 }
 
