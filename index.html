@@ -129,18 +129,23 @@ window.location.href = pagina;
 
 </script>
 
-<!-- REGISTRO DO SERVICE WORKER -->
-
 <script>
 
 if ('serviceWorker' in navigator) {
 
-navigator.serviceWorker.register('/service-worker.js')
+window.addEventListener('load', function(){
+
+navigator.serviceWorker.register('./service-worker.js')
 .then(function(reg){
-console.log("Service Worker registrado com sucesso", reg);
-})
-.catch(function(err){
-console.log("Erro ao registrar Service Worker", err);
+
+console.log('Service Worker registrado:', reg.scope);
+
+}).catch(function(error){
+
+console.log('Erro ao registrar Service Worker:', error);
+
+});
+
 });
 
 }
