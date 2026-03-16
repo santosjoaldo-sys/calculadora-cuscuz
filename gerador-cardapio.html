@@ -35,7 +35,7 @@ text-align:center;
 margin-bottom:20px;
 }
 
-select,input{
+input{
 width:100%;
 padding:10px;
 margin-top:10px;
@@ -62,15 +62,10 @@ margin-top:20px;
 .card{
 
 background:#f7f7f7;
-
 padding:12px;
-
 margin-bottom:10px;
-
 border-radius:8px;
-
 box-shadow:0 3px 8px rgba(0,0,0,0.1);
-
 font-size:15px;
 
 }
@@ -112,12 +107,7 @@ background:#888;
 
 <h2>Gerador de Cardápio Lucrativo</h2>
 
-<select id="tipo">
-<option>Cuscuz Gourmet</option>
-<option>Hambúrguer</option>
-<option>Pastel</option>
-<option>Bolo Caseiro</option>
-</select>
+<input id="tipo" placeholder="Digite o tipo de comida (ex: Pizza, Cuscuz, Marmita, Hot Dog)">
 
 <input id="meta" placeholder="Meta diária (ex: 200)">
 
@@ -142,6 +132,11 @@ async function gerar(){
 const tipo = document.getElementById("tipo").value;
 const meta = document.getElementById("meta").value;
 const custo = document.getElementById("custo").value;
+
+if(!tipo){
+alert("Digite o tipo de comida.");
+return;
+}
 
 const res = await fetch("/api/cardapio",{
 method:"POST",
