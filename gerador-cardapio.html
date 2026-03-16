@@ -55,11 +55,22 @@ cursor:pointer;
 
 .result{
 margin-top:20px;
+}
+
+.card{
+
 background:#f7f7f7;
-padding:15px;
+
+padding:12px;
+
+margin-bottom:10px;
+
 border-radius:8px;
+
+box-shadow:0 3px 8px rgba(0,0,0,0.1);
+
 line-height:1.6;
-white-space:pre-line;
+
 }
 
 .voltar{
@@ -128,7 +139,21 @@ body:JSON.stringify({tipo,meta,custo})
 
 const data = await res.json();
 
-document.getElementById("resultado").innerText = data.resultado;
+const linhas = data.resultado.split("\n");
+
+let html = "";
+
+linhas.forEach(linha => {
+
+if(linha.trim() !== ""){
+
+html += `<div class="card">${linha}</div>`;
+
+}
+
+});
+
+document.getElementById("resultado").innerHTML = html;
 
 }
 
