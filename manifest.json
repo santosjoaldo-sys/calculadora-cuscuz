@@ -1,8 +1,10 @@
 {
 "name": "Comida Lucrativa AI",
 "short_name": "Comida Lucrativa",
-"start_url": "/",
+"description": "Ferramentas inteligentes para quem quer ganhar dinheiro vendendo comida.",
+"start_url": "/index.html",
 "display": "standalone",
+"orientation": "portrait",
 "background_color": "#f5e9d8",
 "theme_color": "#ff7a00",
 "icons": [
