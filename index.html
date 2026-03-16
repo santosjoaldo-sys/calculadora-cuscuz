@@ -8,6 +8,8 @@
 
 <title>Comida Lucrativa AI</title>
 
+<link rel="manifest" href="/manifest.json">
+
 <style>
 
 body{
@@ -125,6 +127,13 @@ Criado para ajudar quem quer vender comida e aumentar a renda.
 
 function abrir(pagina){
 window.location.href = pagina;
+}
+
+if ("serviceWorker" in navigator) {
+navigator.serviceWorker.register("/service-worker.js")
+.then(function() {
+console.log("Service Worker registrado");
+});
 }
 
 </script>
