@@ -1,38 +1,51 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
 
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Post Instagram</title>
+<title>Gerador de Post Instagram</title>
 
 <style>
 
 body{
 font-family:Arial;
-background:#fff5e6;
+background:#f5e9d8;
 display:flex;
 justify-content:center;
 align-items:center;
-height:100vh;
+min-height:100vh;
 margin:0;
 }
 
 .container{
 background:white;
-padding:25px;
+padding:30px;
 width:90%;
-max-width:450px;
+max-width:420px;
 border-radius:12px;
 box-shadow:0 10px 20px rgba(0,0,0,0.1);
+}
+
+h2{
 text-align:center;
+margin-bottom:20px;
+}
+
+input{
+width:100%;
+padding:10px;
+margin-top:10px;
+border:1px solid #ddd;
+border-radius:6px;
 }
 
 button{
 width:100%;
 padding:12px;
-margin-top:10px;
+margin-top:12px;
 background:#ff7a00;
 color:white;
 border:none;
@@ -42,7 +55,28 @@ cursor:pointer;
 
 .result{
 margin-top:20px;
-text-align:left;
+background:#f7f7f7;
+padding:15px;
+border-radius:8px;
+line-height:1.6;
+white-space:pre-line;
+}
+
+.voltar{
+position:fixed;
+top:20px;
+left:20px;
+background:#ff7a00;
+color:white;
+border:none;
+padding:10px 15px;
+border-radius:6px;
+cursor:pointer;
+width:auto;
+}
+
+.copiar{
+background:#6a5acd;
 }
 
 </style>
@@ -51,15 +85,19 @@ text-align:left;
 
 <body>
 
+<button class="voltar" onclick="voltarMenu()">⬅ Voltar ao Menu</button>
+
 <div class="container">
 
-<h2>📣 Gerador de Post Instagram</h2>
+<h2>📣 Gerador de Post para Instagram</h2>
 
-<input id="produto" placeholder="Ex: Cuscuz Gourmet" style="width:100%;padding:10px">
+<input id="produto" placeholder="Ex: Cuscuz Gourmet">
 
 <button onclick="gerar()">Gerar Post</button>
 
 <div class="result" id="resultado"></div>
+
+<button class="copiar" onclick="copiarResultado()">📋 Copiar Resultado</button>
 
 </div>
 
@@ -67,9 +105,9 @@ text-align:left;
 
 async function gerar(){
 
-const produto=document.getElementById("produto").value;
+const produto = document.getElementById("produto").value;
 
-const res=await fetch("/api/post",{
+const res = await fetch("/api/post",{
 method:"POST",
 headers:{
 "Content-Type":"application/json"
@@ -77,9 +115,23 @@ headers:{
 body:JSON.stringify({produto})
 });
 
-const data=await res.json();
+const data = await res.json();
 
-document.getElementById("resultado").innerText=data.resultado;
+document.getElementById("resultado").innerText = data.resultado;
+
+}
+
+function voltarMenu(){
+window.location.href = "index.html";
+}
+
+function copiarResultado(){
+
+const texto = document.getElementById("resultado").innerText;
+
+navigator.clipboard.writeText(texto);
+
+alert("Resultado copiado!");
 
 }
 
