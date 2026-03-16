@@ -69,7 +69,7 @@ border-radius:8px;
 
 box-shadow:0 3px 8px rgba(0,0,0,0.1);
 
-line-height:1.6;
+font-size:15px;
 
 }
 
@@ -145,11 +145,19 @@ let html = "";
 
 linhas.forEach(linha => {
 
-if(linha.trim() !== ""){
+if(linha.trim() === "") return;
 
-html += `<div class="card">${linha}</div>`;
+let icone = "🍲";
 
-}
+const texto = linha.toLowerCase();
+
+if(texto.includes("preço")) icone = "💰";
+
+if(texto.includes("unidades")) icone = "📊";
+
+if(texto.includes("meta")) icone = "🎯";
+
+html += `<div class="card">${icone} ${linha}</div>`;
 
 });
 
