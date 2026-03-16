@@ -6,47 +6,77 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Gerador de Cardápio Lucrativo</title>
+<title>Gerador de Cardápio</title>
 
 <style>
 
 body{
 font-family:Arial;
-background:#fff7e6;
+background:#f5e9d8;
 display:flex;
 justify-content:center;
 align-items:center;
-height:100vh;
+min-height:100vh;
+margin:0;
 }
 
 .container{
 background:white;
 padding:30px;
+width:90%;
+max-width:420px;
 border-radius:12px;
-width:380px;
-box-shadow:0 10px 25px rgba(0,0,0,0.1);
-text-align:center;
+box-shadow:0 10px 20px rgba(0,0,0,0.1);
 }
 
-input, select{
+h2{
+text-align:center;
+margin-bottom:20px;
+}
+
+select,input{
 width:100%;
 padding:10px;
 margin-top:10px;
+border:1px solid #ddd;
+border-radius:6px;
 }
 
 button{
 width:100%;
 padding:12px;
-margin-top:15px;
+margin-top:12px;
 background:#ff7a00;
 color:white;
 border:none;
+border-radius:6px;
 cursor:pointer;
 }
 
 .result{
 margin-top:20px;
-text-align:left;
+background:#f7f7f7;
+padding:15px;
+border-radius:8px;
+line-height:1.6;
+white-space:pre-line;
+}
+
+.voltar{
+position:fixed;
+top:20px;
+left:20px;
+background:#ff7a00;
+color:white;
+border:none;
+padding:10px 15px;
+border-radius:6px;
+cursor:pointer;
+width:auto;
+}
+
+.copiar{
+background:#6a5acd;
 }
 
 </style>
@@ -55,21 +85,22 @@ text-align:left;
 
 <body>
 
+<button class="voltar" onclick="voltarMenu()">⬅ Voltar ao Menu</button>
+
 <div class="container">
 
 <h2>Gerador de Cardápio Lucrativo</h2>
 
-<select id="comida">
-
-<option value="cuscuz">Cuscuz Gourmet</option>
-<option value="bolo">Bolo no pote</option>
-<option value="pastel">Pastel</option>
-
+<select id="tipo">
+<option>Cuscuz Gourmet</option>
+<option>Hambúrguer</option>
+<option>Pastel</option>
+<option>Bolo Caseiro</option>
 </select>
 
-<input type="number" id="meta" placeholder="Quanto quer ganhar por dia">
+<input id="meta" placeholder="Meta diária (ex: 200)">
 
-<input type="number" id="custo" placeholder="Custo por unidade">
+<input id="custo" placeholder="Custo por unidade (ex: 8)">
 
 <button onclick="gerar()">Gerar Cardápio</button>
 
@@ -81,6 +112,26 @@ text-align:left;
 
 <script>
 
+async function gerar(){
+
+const tipo = document.getElementById("tipo").value;
+const meta = document.getElementById("meta").value;
+const custo = document.getElementById("custo").value;
+
+const res = await fetch("/api/cardapio",{
+method:"POST",
+headers:{
+"Content-Type":"application/json"
+},
+body:JSON.stringify({tipo,meta,custo})
+});
+
+const data = await res.json();
+
+document.getElementById("resultado").innerText = data.resultado;
+
+}
+
 function voltarMenu(){
 window.location.href = "index.html";
 }
@@ -96,70 +147,6 @@ alert("Resultado copiado!");
 }
 
 </script>
-
-cardapio = `
-Cuscuz carne seca<br>
-Cuscuz frango cremoso<br>
-Cuscuz calabresa queijo
-`;
-
-}
-
-if(comida == "bolo"){
-
-cardapio = `
-Bolo no pote chocolate<br>
-Bolo no pote ninho<br>
-Bolo no pote morango
-`;
-
-}
-
-if(comida == "pastel"){
-
-cardapio = `
-Pastel carne<br>
-Pastel frango<br>
-Pastel queijo
-`;
-
-}
-
-document.getElementById("resultado").innerHTML =
-
-`<b>Cardápio sugerido</b><br><br>
-
-${cardapio}
-
-<br><br>
-
-Preço sugerido: R$${preco.toFixed(2)}
-
-<br>
-
-Para ganhar R$${meta} por dia venda ${unidades} unidades.
-
-`;
-
-}
-
-</script>
-
-function voltarMenu(){
-window.location.href = "index.html";
-}
-
-function copiarResultado(){
-
-const texto = document.getElementById("resultado").innerText;
-
-navigator.clipboard.writeText(texto);
-
-alert("Resultado copiado!");
-}
 
 </body>
-
-<button class="voltar" onclick="voltarMenu()">⬅ Voltar ao Menu</button>
-
 </html>
