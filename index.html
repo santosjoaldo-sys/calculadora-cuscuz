@@ -11,8 +11,8 @@
 <style>
 
 body{
-font-family: Arial;
-background:#fff5e6;
+font-family:Arial;
+background:#f5e9d8;
 display:flex;
 justify-content:center;
 align-items:center;
@@ -23,17 +23,24 @@ padding:20px;
 
 .container{
 background:white;
-padding:30px;
+padding:35px;
 width:100%;
-max-width:500px;
+max-width:450px;
 border-radius:12px;
 box-shadow:0 10px 25px rgba(0,0,0,0.1);
 text-align:center;
 }
 
-h1{
-color:#ff7a00;
+.logo{
+font-size:28px;
+font-weight:bold;
+margin-bottom:10px;
+}
+
+.subtitulo{
+color:#555;
 margin-bottom:25px;
+line-height:1.4;
 }
 
 .card{
@@ -43,14 +50,11 @@ margin-top:12px;
 border-radius:8px;
 cursor:pointer;
 transition:0.2s;
+font-size:16px;
 }
 
 .card:hover{
 background:#ececec;
-}
-
-.card strong{
-font-size:16px;
 }
 
 </style>
@@ -61,22 +65,28 @@ font-size:16px;
 
 <div class="container">
 
-<h1>🍲 Comida Lucrativa AI</h1>
+<div class="logo">
+🍲 COMIDA LUCRATIVA AI
+</div>
+
+<div class="subtitulo">
+Ferramentas inteligentes para quem quer ganhar dinheiro vendendo comida.
+</div>
 
 <div class="card" onclick="abrir('gerador-cardapio.html')">
-<strong>🍲 Gerador de Cardápio</strong>
+🍲 Gerador de Cardápio Lucrativo
 </div>
 
 <div class="card" onclick="abrir('gerador-nomes.html')">
-<strong>🔥 Gerador de Nomes de Pratos</strong>
+🔥 Gerador de Nomes de Pratos
 </div>
 
 <div class="card" onclick="abrir('gerador-combos.html')">
-<strong>📦 Gerador de Combos Lucrativos</strong>
+📦 Gerador de Combos Lucrativos
 </div>
 
 <div class="card" onclick="abrir('gerador-post.html')">
-<strong>📣 Gerador de Post para Instagram</strong>
+📣 Gerador de Post para Instagram
 </div>
 
 </div>
@@ -90,5 +100,4 @@ window.location.href = pagina;
 </script>
 
 </body>
-
 </html>
