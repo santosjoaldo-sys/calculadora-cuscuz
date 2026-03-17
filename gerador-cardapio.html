@@ -81,6 +81,12 @@ animation:pulse 1.5s infinite;
 100%{opacity:0.3}
 }
 
+.barra-testes{
+margin-top:10px;
+font-size:22px;
+letter-spacing:5px;
+}
+
 </style>
 
 </head>
@@ -91,7 +97,10 @@ animation:pulse 1.5s infinite;
 
 <h2>🍲 Gerador de Cardápio Lucrativo</h2>
 
-<p id="contador"></p>
+<div>
+<strong>Testes gratuitos restantes</strong>
+<div id="barra" class="barra-testes"></div>
+</div>
 
 <input id="tipo" placeholder="Digite o tipo de comida">
 <input id="meta" placeholder="Meta diária">
@@ -118,14 +127,33 @@ animation:pulse 1.5s infinite;
 
 let testes = localStorage.getItem("testes") || 0
 
-document.getElementById("contador").innerText =
-"⚡ Você ainda tem " + (3 - testes) + " teste(s) gratuito(s)."
+function atualizarBarra(){
+
+let restante = 3 - testes
+
+let barra = ""
+
+for(let i=0;i<restante;i++){
+barra += "🟩"
+}
+
+for(let i=restante;i<3;i++){
+barra += "⬜"
+}
+
+document.getElementById("barra").innerText = barra
+
+}
+
+atualizarBarra()
 
 async function gerar(){
 
 testes++
 
 localStorage.setItem("testes", testes)
+
+atualizarBarra()
 
 if(testes > 3){
 
@@ -160,9 +188,6 @@ const data = await res.json()
 document.getElementById("loader").style.display="none"
 
 document.getElementById("resultado").innerText = data.resultado
-
-document.getElementById("contador").innerText =
-"⚡ Você ainda tem " + (3 - testes) + " teste(s) gratuito(s)."
 
 }
 
