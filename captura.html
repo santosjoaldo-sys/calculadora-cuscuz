@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Acesso à Ferramenta</title>
+
+<style>
+
+body{
+font-family:Arial;
+background:#f5e9d8;
+display:flex;
+justify-content:center;
+align-items:center;
+min-height:100vh;
+margin:0;
+padding:20px;
+}
+
+.container{
+background:white;
+padding:30px;
+max-width:420px;
+width:100%;
+border-radius:12px;
+box-shadow:0 10px 25px rgba(0,0,0,0.1);
+text-align:center;
+}
+
+input{
+width:100%;
+padding:12px;
+margin-top:10px;
+border:1px solid #ddd;
+border-radius:6px;
+}
+
+button{
+width:100%;
+padding:14px;
+margin-top:15px;
+background:#ff7a00;
+color:white;
+border:none;
+border-radius:6px;
+font-size:16px;
+cursor:pointer;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>🚀 Acesso à Ferramenta</h2>
+
+<p>Preencha seus dados para liberar o acesso.</p>
+
+<input id="nome" placeholder="Seu nome">
+
+<input id="whatsapp" placeholder="WhatsApp">
+
+<input id="cidade" placeholder="Cidade">
+
+<input id="estado" placeholder="Estado">
+
+<button onclick="enviar()">Liberar Acesso</button>
+
+</div>
+
+<script>
+
+async function enviar(){
+
+const nome=document.getElementById("nome").value;
+const whatsapp=document.getElementById("whatsapp").value;
+const cidade=document.getElementById("cidade").value;
+const estado=document.getElementById("estado").value;
+
+if(!nome || !whatsapp){
+
+alert("Preencha nome e WhatsApp");
+
+return;
+
+}
+
+await fetch("/api/lead",{
+
+method:"POST",
+
+headers:{
+"Content-Type":"application/json"
+},
+
+body:JSON.stringify({
+nome,
+whatsapp,
+cidade,
+estado
+})
+
+});
+
+window.location.href="app.html";
+
+}
+
+</script>
+
+</body>
+</html>
