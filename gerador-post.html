@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
 
 <meta charset="UTF-8">
@@ -9,17 +10,67 @@
 
 <style>
 
-body{font-family:Arial;background:#fff5e6;display:flex;justify-content:center;align-items:flex-start;min-height:100vh;padding:40px 0;margin:0;}
+body{
+font-family:Arial;
+background:#fff5e6;
+display:flex;
+justify-content:center;
+align-items:flex-start;
+min-height:100vh;
+padding:40px 0;
+margin:0;
+}
 
-.container{background:white;padding:25px;width:90%;max-width:450px;border-radius:12px;box-shadow:0 10px 20px rgba(0,0,0,0.1);text-align:center;}
+.container{
+background:white;
+padding:25px;
+width:90%;
+max-width:450px;
+border-radius:12px;
+box-shadow:0 10px 20px rgba(0,0,0,0.1);
+text-align:center;
+}
 
-input{width:100%;padding:10px;margin-top:10px;border-radius:6px;border:1px solid #ddd;}
+input{
+width:100%;
+padding:10px;
+margin-top:10px;
+border-radius:6px;
+border:1px solid #ddd;
+}
 
-button{width:100%;padding:12px;margin-top:12px;background:#2ecc71;color:white;border:none;border-radius:6px;}
+button{
+width:100%;
+padding:12px;
+margin-top:12px;
+background:#2ecc71;
+color:white;
+border:none;
+border-radius:6px;
+cursor:pointer;
+}
 
-.result{margin-top:20px;background:#fafafa;padding:15px;border-radius:8px;max-height:300px;overflow:auto;white-space:pre-line;text-align:left;}
+.result{
+margin-top:20px;
+background:#fafafa;
+padding:15px;
+border-radius:8px;
+max-height:300px;
+overflow:auto;
+white-space:pre-line;
+text-align:left;
+}
 
-.barra{font-size:22px;letter-spacing:5px;margin-top:10px;}
+.barra{
+font-size:22px;
+letter-spacing:5px;
+margin-top:10px;
+}
+
+.checkout{
+background:#ff7a00;
+animation:pulsar 1.2s infinite;
+}
 
 </style>
 
@@ -29,7 +80,7 @@ button{width:100%;padding:12px;margin-top:12px;background:#2ecc71;color:white;bo
 
 <div class="container">
 
-<h2>📣 Gerador de Post</h2>
+<h2>📣 Gerador de Post para Instagram</h2>
 
 <div>Testes restantes</div>
 <div id="barra" class="barra"></div>
@@ -68,7 +119,8 @@ let b=""
 for(let i=0;i<restante;i++){b+="🟩"}
 for(let i=restante;i<3;i++){b+="⬜"}
 
-barra.innerText=b
+document.getElementById("barra").innerText=b
+
 }
 
 barra()
@@ -84,9 +136,9 @@ barra()
 
 if(testes>3 && aluno!=="1"){
 
-resultado.innerHTML="🚫 Testes finalizados."
+resultado.innerHTML="🚫 Testes gratuitos finalizados."
 
-checkout.innerHTML='<button onclick="checkout()">🔥 DESBLOQUEAR</button>'
+checkout.innerHTML='<button class="checkout" onclick="checkout()">🔥 DESBLOQUEAR</button>'
 
 return
 }
@@ -103,6 +155,20 @@ body:JSON.stringify({tipo,promo})
 const data=await res.json()
 
 resultado.innerText=data.resultado
+
+if(testes===3 && aluno!=="1"){
+
+checkout.innerHTML=`<div style="margin-top:20px">
+
+⚠️ Este foi seu último teste gratuito.
+
+<button class="checkout" onclick="checkout()">
+🔥 DESBLOQUEAR TODAS AS FERRAMENTAS
+</button>
+
+</div>`
+
+}
 
 }
 
