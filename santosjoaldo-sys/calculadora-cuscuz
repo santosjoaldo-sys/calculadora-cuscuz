@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
 
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Gerador de Nomes</title>
+<title>Calculadora de Lucro - Comida Lucrativa AI</title>
 
 <style>
 
@@ -15,34 +16,56 @@ background:#fff5e6;
 display:flex;
 justify-content:center;
 align-items:center;
-height:100vh;
+min-height:100vh;
 margin:0;
+padding:20px;
 }
 
 .container{
 background:white;
-padding:25px;
-width:90%;
-max-width:450px;
+padding:30px;
+width:100%;
+max-width:420px;
 border-radius:12px;
 box-shadow:0 10px 20px rgba(0,0,0,0.1);
 text-align:center;
 }
 
+h2{
+color:#ff7a00;
+margin-bottom:20px;
+}
+
+input{
+width:100%;
+padding:10px;
+margin-top:10px;
+border:1px solid #ddd;
+border-radius:6px;
+}
+
 button{
 width:100%;
 padding:12px;
-margin-top:10px;
+margin-top:12px;
 background:#ff7a00;
 color:white;
 border:none;
 border-radius:6px;
 cursor:pointer;
+font-size:16px;
 }
 
 .result{
 margin-top:20px;
+background:#f7f7f7;
+padding:15px;
+border-radius:8px;
 text-align:left;
+}
+
+.voltar{
+background:#888;
 }
 
 </style>
@@ -53,33 +76,64 @@ text-align:left;
 
 <div class="container">
 
-<h2>🔥 Gerador de Nomes de Pratos</h2>
+<h2>📊 Calculadora de Lucro</h2>
 
-<input id="produto" placeholder="Ex: Cuscuz Gourmet" style="width:100%;padding:10px">
+<input id="custo" placeholder="Custo por unidade (ex: 4.50)">
 
-<button onclick="gerar()">Gerar Nomes</button>
+<input id="preco" placeholder="Preço de venda (ex: 10)">
+
+<input id="quantidade" placeholder="Quantidade vendida por dia">
+
+<button onclick="calcular()">Calcular Lucro</button>
 
 <div class="result" id="resultado"></div>
+
+<button class="voltar" onclick="voltar()">⬅ Voltar</button>
 
 </div>
 
 <script>
 
-async function gerar(){
+function calcular(){
 
-const produto=document.getElementById("produto").value;
+const custo=parseFloat(document.getElementById("custo").value);
+const preco=parseFloat(document.getElementById("preco").value);
+const quantidade=parseInt(document.getElementById("quantidade").value);
 
-const res=await fetch("/api/nomes",{
-method:"POST",
-headers:{
-"Content-Type":"application/json"
-},
-body:JSON.stringify({produto})
-});
+if(!custo || !preco || !quantidade){
 
-const data=await res.json();
+document.getElementById("resultado").innerHTML=
+"⚠️ Preencha todos os campos.";
 
-document.getElementById("resultado").innerText=data.resultado;
+return;
+
+}
+
+const lucroUnitario = preco - custo;
+const lucroDia = lucroUnitario * quantidade;
+const lucroMes = lucroDia * 30;
+
+document.getElementById("resultado").innerHTML =
+
+`
+<b>💰 Lucro por unidade:</b> R$ ${lucroUnitario.toFixed(2)} <br><br>
+
+<b>📅 Lucro por dia:</b> R$ ${lucroDia.toFixed(2)} <br><br>
+
+<b>🚀 Lucro por mês:</b> R$ ${lucroMes.toFixed(2)}
+`;
+
+}
+
+function voltar(){
+
+const params = new URLSearchParams(window.location.search);
+
+if(params.get("aluno") === "1"){
+window.location.href="../app.html?aluno=1";
+}else{
+window.location.href="../app.html";
+}
 
 }
 
