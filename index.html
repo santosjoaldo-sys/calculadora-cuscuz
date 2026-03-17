@@ -55,9 +55,6 @@ border-radius:8px;
 font-size:16px;
 cursor:pointer;
 color:white;
-}
-
-.teste{
 background:#ff7a00;
 }
 
@@ -87,7 +84,7 @@ color:#888;
 Ferramenta inteligente para descobrir comidas lucrativas para vender.
 </div>
 
-<button class="botao teste" onclick="abrir()">
+<button class="botao" onclick="abrir()">
 🚀 TESTAR FERRAMENTA GRÁTIS
 </button>
 
@@ -112,12 +109,8 @@ window.location.href = "acesso.html";
 
 }
 
-// registrar service worker (PWA)
-
 if("serviceWorker" in navigator){
-navigator.serviceWorker.register("/service-worker.js")
-.then(()=>console.log("Service Worker registrado"))
-.catch(err=>console.log("Erro SW:",err));
+navigator.serviceWorker.register("/service-worker.js");
 }
 
 </script>
