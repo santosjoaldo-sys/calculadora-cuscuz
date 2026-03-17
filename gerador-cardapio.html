@@ -32,13 +32,7 @@ text-align:center;
 }
 
 h2{
-margin-bottom:5px;
-}
-
-.sub{
-color:#777;
-font-size:14px;
-margin-bottom:15px;
+margin-bottom:10px;
 }
 
 input{
@@ -63,18 +57,18 @@ font-size:16px;
 
 .result{
 margin-top:20px;
-text-align:left;
 background:#fafafa;
 padding:15px;
 border-radius:8px;
 max-height:300px;
 overflow:auto;
 white-space:pre-line;
+text-align:left;
 }
 
 #loader{
 display:none;
-margin-top:20px;
+margin-top:15px;
 font-weight:bold;
 color:#6a5acd;
 animation:pulse 1.5s infinite;
@@ -87,15 +81,13 @@ animation:pulse 1.5s infinite;
 }
 
 .barra{
-margin-top:10px;
 font-size:22px;
 letter-spacing:5px;
+margin-top:10px;
 }
 
 .checkout{
-margin-top:20px;
 background:#ff7a00;
-font-weight:bold;
 animation:pulsar 1.2s infinite;
 }
 
@@ -103,15 +95,6 @@ animation:pulsar 1.2s infinite;
 0%{transform:scale(1)}
 50%{transform:scale(1.05)}
 100%{transform:scale(1)}
-}
-
-.valor{
-margin-top:15px;
-font-size:15px;
-color:#333;
-background:#f7f7f7;
-padding:10px;
-border-radius:6px;
 }
 
 </style>
@@ -124,14 +107,8 @@ border-radius:6px;
 
 <h2>🍲 Gerador de Cardápio Lucrativo</h2>
 
-<div class="sub">
-Descubra ideias de comida para vender todos os dias
-</div>
-
-<div>
-<strong>Testes gratuitos restantes</strong>
+<div>Testes gratuitos restantes</div>
 <div id="barra" class="barra"></div>
-</div>
 
 <input id="tipo" placeholder="Digite o tipo de comida">
 
@@ -141,13 +118,9 @@ Descubra ideias de comida para vender todos os dias
 
 <button onclick="gerar()">Gerar Cardápio</button>
 
-<div id="loader">
-🤖 Comida Lucrativa AI está criando seu cardápio...
-</div>
+<div id="loader">🤖 Comida Lucrativa AI está criando seu cardápio...</div>
 
 <div class="result" id="resultado"></div>
-
-<div class="valor" id="valor"></div>
 
 <button onclick="copiar()">📋 Copiar Resultado</button>
 
@@ -171,15 +144,10 @@ let restante = 3 - testes
 
 let barra=""
 
-for(let i=0;i<restante;i++){
-barra+="🟩"
-}
+for(let i=0;i<restante;i++){barra+="🟩"}
+for(let i=restante;i<3;i++){barra+="⬜"}
 
-for(let i=restante;i<3;i++){
-barra+="⬜"
-}
-
-document.getElementById("barra").innerText=barra
+document.getElementById("barra").innerText = barra
 
 }
 
@@ -195,49 +163,43 @@ atualizarBarra()
 
 if(testes>3){
 
-document.getElementById("resultado").innerHTML=
-"🚫 Testes gratuitos finalizados\n\nVocê já utilizou os 3 testes gratuitos."
+document.getElementById("resultado").innerHTML =
+"🚫 Testes gratuitos finalizados.\n\nVocê já utilizou os 3 testes gratuitos."
 
-document.getElementById("checkout").innerHTML=
+document.getElementById("checkout").innerHTML =
 '<button class="checkout" onclick="checkout()">🔥 DESBLOQUEAR TODAS AS FERRAMENTAS</button>'
 
 return
+
 }
 
 document.getElementById("loader").style.display="block"
 
-document.getElementById("resultado").innerText=""
-
-document.getElementById("valor").innerText=""
-
 await new Promise(resolve=>setTimeout(resolve,1200))
 
-const tipo=document.getElementById("tipo").value
-const meta=document.getElementById("meta").value
-const custo=document.getElementById("custo").value
+const tipo = document.getElementById("tipo").value
+const meta = document.getElementById("meta").value
+const custo = document.getElementById("custo").value
 
-const res=await fetch("/api/cardapio",{
+const res = await fetch("/api/cardapio",{
+
 method:"POST",
+
 headers:{
+
 "Content-Type":"application/json"
+
 },
+
 body:JSON.stringify({tipo,meta,custo})
+
 })
 
-const data=await res.json()
+const data = await res.json()
 
 document.getElementById("loader").style.display="none"
 
-document.getElementById("resultado").innerText=data.resultado
-
-if(meta){
-
-let lucroMes = meta*30
-
-document.getElementById("valor").innerHTML=
-"💰 Se você vender todos os dias pode faturar cerca de <b>R$ "+lucroMes+"</b> por mês."
-
-}
+document.getElementById("resultado").innerText = data.resultado
 
 }
 
@@ -253,7 +215,7 @@ alert("Resultado copiado!")
 
 function whatsapp(){
 
-let texto=encodeURIComponent(
+let texto = encodeURIComponent(
 document.getElementById("resultado").innerText
 )
 
@@ -264,7 +226,6 @@ window.open("https://wa.me/?text="+texto)
 function limpar(){
 
 document.getElementById("resultado").innerText=""
-document.getElementById("valor").innerText=""
 
 }
 
@@ -276,7 +237,10 @@ window.location.href="app.html"
 
 function checkout(){
 
-window.open("https://pay.hotmart.com/K92944551N?off=m4vo1hl6&checkoutMode=10")
+window.open(
+"https://pay.hotmart.com/K92944551N?off=m4vo1hl6&checkoutMode=10",
+"_blank"
+)
 
 }
 
