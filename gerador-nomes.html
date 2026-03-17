@@ -33,13 +33,15 @@ input{
 width:100%;
 padding:10px;
 margin-top:10px;
+border-radius:6px;
+border:1px solid #ddd;
 }
 
 button{
 width:100%;
 padding:12px;
 margin-top:10px;
-background:#ff7a00;
+background:#6a5acd;
 color:white;
 border:none;
 border-radius:6px;
@@ -49,7 +51,6 @@ cursor:pointer;
 .result{
 margin-top:20px;
 text-align:left;
-white-space:pre-line;
 }
 
 </style>
@@ -68,80 +69,20 @@ white-space:pre-line;
 
 <div class="result" id="resultado"></div>
 
+<button onclick="copiar()">📋 Copiar</button>
+<button onclick="whatsapp()">📲 Enviar WhatsApp</button>
+<button onclick="limpar()">🗑 Limpar</button>
+<button onclick="voltar()">⬅ Voltar</button>
+
 </div>
 
 <script>
 
-const LIMITE_USOS = 3
-
-function verificarUso(){
-
-const params = new URLSearchParams(window.location.search)
-
-if(params.get("aluno") === "1"){
-return true
-}
-
-let usos = parseInt(localStorage.getItem("usos_app") || "0")
-
-if(usos >= LIMITE_USOS){
-
-document.getElementById("resultado").innerHTML = `
-
-<h3>🚫 Testes gratuitos finalizados</h3>
-
-<p>Você já utilizou os 3 testes gratuitos.</p>
-
-<a href="https://pay.hotmart.com/K92944551N?off=m4vo1hl6&checkoutMode=10"
-style="background:#ff7a00;color:white;padding:12px;border-radius:6px;text-decoration:none;display:inline-block;margin-top:10px">
-
-🔥 QUERO COMPRAR O CURSO
-
-</a>
-
-`
-
-return false
-
-}
-
-return true
-
-}
-
-function registrarUso(){
-
-const params = new URLSearchParams(window.location.search)
-
-if(params.get("aluno") === "1"){
-return
-}
-
-let usos = parseInt(localStorage.getItem("usos_app") || "0")
-
-usos++
-
-localStorage.setItem("usos_app", usos)
-
-}
-
 async function gerar(){
 
-if(!verificarUso()){
-return
-}
+const produto = document.getElementById("produto").value
 
-const produto=document.getElementById("produto").value
-
-if(!produto){
-
-document.getElementById("resultado").innerText="Digite o tipo de comida"
-
-return
-
-}
-
-const res=await fetch("/api/nomes",{
+const res = await fetch("/api/nomes",{
 method:"POST",
 headers:{
 "Content-Type":"application/json"
@@ -149,11 +90,37 @@ headers:{
 body:JSON.stringify({produto})
 })
 
-const data=await res.json()
+const data = await res.json()
 
-document.getElementById("resultado").innerText=data.resultado
+document.getElementById("resultado").innerText = data.resultado
 
-registrarUso()
+}
+
+function copiar(){
+navigator.clipboard.writeText(
+document.getElementById("resultado").innerText
+)
+}
+
+function whatsapp(){
+
+let texto = encodeURIComponent(
+document.getElementById("resultado").innerText
+)
+
+window.open("https://wa.me/?text=" + texto)
+
+}
+
+function limpar(){
+
+document.getElementById("resultado").innerText = ""
+
+}
+
+function voltar(){
+
+window.location.href="app.html"
 
 }
 
