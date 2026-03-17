@@ -67,6 +67,20 @@ background:#ff7a00;
 font-weight:bold;
 }
 
+#loader{
+display:none;
+margin-top:20px;
+font-weight:bold;
+color:#6a5acd;
+animation:pulse 1.5s infinite;
+}
+
+@keyframes pulse{
+0%{opacity:0.3}
+50%{opacity:1}
+100%{opacity:0.3}
+}
+
 </style>
 
 </head>
@@ -84,6 +98,10 @@ font-weight:bold;
 <input id="custo" placeholder="Custo por unidade">
 
 <button onclick="gerar()">Gerar Cardápio</button>
+
+<div id="loader">
+🤖 Comida Lucrativa AI está criando seu cardápio...
+</div>
 
 <div class="result" id="resultado"></div>
 
@@ -120,6 +138,11 @@ document.getElementById("checkout").innerHTML =
 return
 }
 
+document.getElementById("loader").style.display="block"
+document.getElementById("resultado").innerText=""
+
+await new Promise(resolve => setTimeout(resolve,1200))
+
 const tipo = document.getElementById("tipo").value
 const meta = document.getElementById("meta").value
 const custo = document.getElementById("custo").value
@@ -134,6 +157,8 @@ body:JSON.stringify({tipo,meta,custo})
 
 const data = await res.json()
 
+document.getElementById("loader").style.display="none"
+
 document.getElementById("resultado").innerText = data.resultado
 
 document.getElementById("contador").innerText =
@@ -142,39 +167,28 @@ document.getElementById("contador").innerText =
 }
 
 function copiar(){
-
 navigator.clipboard.writeText(
 document.getElementById("resultado").innerText
 )
-
 }
 
 function whatsapp(){
-
 let texto = encodeURIComponent(
 document.getElementById("resultado").innerText
 )
-
 window.open("https://wa.me/?text="+texto)
-
 }
 
 function limpar(){
-
 document.getElementById("resultado").innerText=""
-
 }
 
 function voltar(){
-
 window.location.href="app.html"
-
 }
 
 function checkout(){
-
 window.open("SEU_LINK_HOTMART_AQUI")
-
 }
 
 </script>
