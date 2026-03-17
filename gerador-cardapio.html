@@ -2,10 +2,8 @@
 <html lang="pt-br">
 
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Gerador de Cardápio Lucrativo</title>
 
 <style>
@@ -67,22 +65,9 @@ letter-spacing:5px;
 margin-top:10px;
 }
 
-#loader{
-display:none;
-margin-top:15px;
-font-weight:bold;
-animation:pulse 1.5s infinite;
-}
-
 .checkout{
 background:#ff7a00;
 animation:pulsar 1.2s infinite;
-}
-
-@keyframes pulse{
-0%{opacity:0.3}
-50%{opacity:1}
-100%{opacity:0.3}
 }
 
 @keyframes pulsar{
@@ -92,27 +77,22 @@ animation:pulsar 1.2s infinite;
 }
 
 </style>
-
 </head>
 
 <body>
 
 <div class="container">
 
-<h2>🍲 Gerador de Cardápio Lucrativo</h2>
+<h2>🍲 Gerador de Cardápio</h2>
 
-<div>Testes gratuitos restantes</div>
+<div>Testes restantes</div>
 <div id="barra" class="barra"></div>
 
 <input id="tipo" placeholder="Tipo de comida">
-
 <input id="meta" placeholder="Meta diária">
-
 <input id="custo" placeholder="Custo por unidade">
 
 <button onclick="gerar()">Gerar Cardápio</button>
-
-<div id="loader">🤖 Comida Lucrativa AI criando cardápio...</div>
 
 <div class="result" id="resultado"></div>
 
@@ -132,24 +112,22 @@ const aluno = params.get("aluno");
 
 let testes = localStorage.getItem("testes") || 0;
 
-if(aluno === "1"){
-testes = 0;
-}
+if(aluno==="1"){testes=0;}
 
-function atualizarBarra(){
+function barra(){
 
-let restante = aluno==="1" ? 3 : 3-testes
+let restante = aluno==="1"?3:3-testes
 
-let barra=""
+let b=""
 
-for(let i=0;i<restante;i++){barra+="🟩"}
-for(let i=restante;i<3;i++){barra+="⬜"}
+for(let i=0;i<restante;i++){b+="🟩"}
+for(let i=restante;i<3;i++){b+="⬜"}
 
-document.getElementById("barra").innerText=barra
+document.getElementById("barra").innerText=b
 
 }
 
-atualizarBarra()
+barra()
 
 async function gerar(){
 
@@ -158,23 +136,17 @@ testes++
 localStorage.setItem("testes",testes)
 }
 
-atualizarBarra()
+barra()
 
 if(testes>3 && aluno!=="1"){
 
-document.getElementById("resultado").innerHTML=
-"🚫 Testes gratuitos finalizados."
+resultado.innerHTML="🚫 Testes gratuitos finalizados."
 
-document.getElementById("checkout").innerHTML=
-'<button class="checkout" onclick="checkout()">🔥 DESBLOQUEAR TODAS AS FERRAMENTAS</button>'
+checkout.innerHTML='<button class="checkout" onclick="checkout()">🔥 DESBLOQUEAR</button>'
 
 return
 
 }
-
-document.getElementById("loader").style.display="block"
-
-await new Promise(resolve=>setTimeout(resolve,1200))
 
 const tipo=document.getElementById("tipo").value
 const meta=document.getElementById("meta").value
@@ -188,24 +160,32 @@ body:JSON.stringify({tipo,meta,custo})
 
 const data=await res.json()
 
-document.getElementById("loader").style.display="none"
+resultado.innerText=data.resultado
 
-document.getElementById("resultado").innerText=data.resultado
+if(testes===3 && aluno!=="1"){
+
+checkout.innerHTML=`<div style="margin-top:20px">
+
+⚠️ Este foi seu último teste gratuito.
+
+<button class="checkout" onclick="checkout()">
+🔥 DESBLOQUEAR TODAS AS FERRAMENTAS
+</button>
+
+</div>`
 
 }
 
-function copiar(){
-navigator.clipboard.writeText(document.getElementById("resultado").innerText)
 }
+
+function copiar(){navigator.clipboard.writeText(resultado.innerText)}
 
 function whatsapp(){
-let texto=encodeURIComponent(document.getElementById("resultado").innerText)
-window.open("https://wa.me/?text="+texto)
+let t=encodeURIComponent(resultado.innerText)
+window.open("https://wa.me/?text="+t)
 }
 
-function limpar(){
-document.getElementById("resultado").innerText=""
-}
+function limpar(){resultado.innerText=""}
 
 function voltar(){
 window.location.href="app.html"+(aluno==="1"?"?aluno=1":"")
