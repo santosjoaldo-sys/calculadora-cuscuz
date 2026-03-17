@@ -6,7 +6,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Gerador de Post</title>
+<title>Gerador de Post para Instagram</title>
 
 <style>
 
@@ -30,6 +30,11 @@ border-radius:12px;
 box-shadow:0 10px 20px rgba(0,0,0,0.1);
 }
 
+h2{
+text-align:center;
+margin-bottom:20px;
+}
+
 input{
 width:100%;
 padding:10px;
@@ -49,11 +54,16 @@ border-radius:6px;
 cursor:pointer;
 }
 
+.result{
+margin-top:20px;
+}
+
 .card{
 background:#f7f7f7;
 padding:12px;
-margin-top:10px;
+margin-bottom:10px;
 border-radius:8px;
+box-shadow:0 3px 8px rgba(0,0,0,0.1);
 }
 
 .actions button{
@@ -73,13 +83,15 @@ background:#888;
 
 <div class="container">
 
-<h2>📣 Gerador de Post</h2>
+<h2>📣 Gerador de Post para Instagram</h2>
 
-<input id="produto" placeholder="Ex: Cuscuz Gourmet">
+<input id="tipo" placeholder="Digite o tipo de comida">
+
+<input id="promo" placeholder="Promoção ou destaque (ex: hoje tem desconto)">
 
 <button onclick="gerar()">Gerar Post</button>
 
-<div id="resultado"></div>
+<div class="result" id="resultado"></div>
 
 <div class="actions">
 
@@ -97,32 +109,36 @@ background:#888;
 
 <script>
 
-const LIMITE_USOS=3;
+const LIMITE_USOS = 3;
 
 function verificarUso(){
 
-const params=new URLSearchParams(window.location.search);
+const params = new URLSearchParams(window.location.search);
 
-if(params.get("aluno")==="1") return true;
-
-let usos=localStorage.getItem("usos_app");
-
-if(usos===null){
-localStorage.setItem("usos_app",0);
-usos=0;
+if(params.get("aluno") === "1"){
+return true;
 }
 
-usos=parseInt(usos);
+let usos = localStorage.getItem("usos_app");
 
-if(usos>=LIMITE_USOS){
+if(usos === null){
+localStorage.setItem("usos_app",0);
+usos = 0;
+}
 
-document.getElementById("resultado").innerHTML=`
+usos = parseInt(usos);
+
+if(usos >= LIMITE_USOS){
+
+document.getElementById("resultado").innerHTML = `
 <div class="card">
 
 <h3>🚫 Testes gratuitos finalizados</h3>
 
+<p>Você já utilizou os 3 testes gratuitos.</p>
+
 <a href="https://pay.hotmart.com/K92944551N?off=m4vo1hl6&checkoutMode=10"
-style="background:#ff7a00;color:white;padding:12px;border-radius:6px;text-decoration:none">
+style="background:#ff7a00;color:white;padding:12px;border-radius:6px;text-decoration:none;display:inline-block;margin-top:10px">
 
 🔥 QUERO COMPRAR O CURSO
 
@@ -141,11 +157,15 @@ return true;
 
 function registrarUso(){
 
-const params=new URLSearchParams(window.location.search);
+const params = new URLSearchParams(window.location.search);
 
-if(params.get("aluno")==="1") return;
+if(params.get("aluno") === "1"){
+return;
+}
 
-let usos=parseInt(localStorage.getItem("usos_app"));
+let usos = localStorage.getItem("usos_app");
+
+usos = parseInt(usos);
 
 usos++;
 
@@ -155,45 +175,67 @@ localStorage.setItem("usos_app",usos);
 
 async function gerar(){
 
-if(!verificarUso()) return;
+if(!verificarUso()){
+return;
+}
 
 registrarUso();
 
-const produto=document.getElementById("produto").value;
+const tipo = document.getElementById("tipo").value;
+const promo = document.getElementById("promo").value;
 
-const res=await fetch("/api/post",{
+try{
+
+const res = await fetch("/api/post",{
 method:"POST",
-headers:{"Content-Type":"application/json"},
-body:JSON.stringify({produto})
+headers:{
+"Content-Type":"application/json"
+},
+body:JSON.stringify({tipo,promo})
 });
 
-const data=await res.json();
+const data = await res.json();
 
-const linhas=data.resultado.split("\n");
+const linhas = data.resultado.split("\n");
 
-let html="";
+let html = "";
 
-linhas.forEach(linha=>{
+linhas.forEach(linha => {
 
 if(linha.trim()==="") return;
 
-html+=`<div class="card">📣 ${linha}</div>`;
+html += `<div class="card">${linha}</div>`;
 
 });
 
-document.getElementById("resultado").innerHTML=html;
+document.getElementById("resultado").innerHTML = html;
+
+}catch(e){
+
+document.getElementById("resultado").innerHTML =
+"<div class='card'>Erro ao gerar post. Tente novamente.</div>";
+
+}
 
 }
 
 function copiar(){
 
-navigator.clipboard.writeText(document.getElementById("resultado").innerText);
+const texto = document.getElementById("resultado").innerText;
+
+navigator.clipboard.writeText(texto);
+
+alert("Post copiado!");
 
 }
 
 function whatsapp(){
 
-window.open("https://wa.me/?text="+encodeURIComponent(document.getElementById("resultado").innerText));
+const texto = document.getElementById("resultado").innerText;
+
+const url = "https://wa.me/?text=" + encodeURIComponent(texto);
+
+window.open(url);
 
 }
 
@@ -205,11 +247,18 @@ document.getElementById("resultado").innerHTML="";
 
 function voltar(){
 
-window.location.href="index.html";
+const params = new URLSearchParams(window.location.search);
+
+if(params.get("aluno") === "1"){
+window.location.href="app.html?aluno=1";
+}else{
+window.location.href="app.html";
+}
 
 }
 
 </script>
 
 </body>
+
 </html>
