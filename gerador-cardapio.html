@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
 
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Gerador de Cardápio</title>
+<title>Gerador de Cardápio Lucrativo</title>
 
 <style>
 
@@ -30,6 +31,16 @@ box-shadow:0 10px 20px rgba(0,0,0,0.1);
 text-align:center;
 }
 
+h2{
+margin-bottom:5px;
+}
+
+.sub{
+color:#777;
+font-size:14px;
+margin-bottom:15px;
+}
+
 input{
 width:100%;
 padding:10px;
@@ -41,7 +52,7 @@ border:1px solid #ddd;
 button{
 width:100%;
 padding:12px;
-margin-top:10px;
+margin-top:12px;
 background:#6a5acd;
 color:white;
 border:none;
@@ -61,12 +72,6 @@ overflow:auto;
 white-space:pre-line;
 }
 
-.checkout{
-margin-top:20px;
-background:#ff7a00;
-font-weight:bold;
-}
-
 #loader{
 display:none;
 margin-top:20px;
@@ -81,10 +86,32 @@ animation:pulse 1.5s infinite;
 100%{opacity:0.3}
 }
 
-.barra-testes{
+.barra{
 margin-top:10px;
 font-size:22px;
 letter-spacing:5px;
+}
+
+.checkout{
+margin-top:20px;
+background:#ff7a00;
+font-weight:bold;
+animation:pulsar 1.2s infinite;
+}
+
+@keyframes pulsar{
+0%{transform:scale(1)}
+50%{transform:scale(1.05)}
+100%{transform:scale(1)}
+}
+
+.valor{
+margin-top:15px;
+font-size:15px;
+color:#333;
+background:#f7f7f7;
+padding:10px;
+border-radius:6px;
 }
 
 </style>
@@ -97,13 +124,19 @@ letter-spacing:5px;
 
 <h2>🍲 Gerador de Cardápio Lucrativo</h2>
 
+<div class="sub">
+Descubra ideias de comida para vender todos os dias
+</div>
+
 <div>
 <strong>Testes gratuitos restantes</strong>
-<div id="barra" class="barra-testes"></div>
+<div id="barra" class="barra"></div>
 </div>
 
 <input id="tipo" placeholder="Digite o tipo de comida">
-<input id="meta" placeholder="Meta diária">
+
+<input id="meta" placeholder="Meta diária (ex: 150)">
+
 <input id="custo" placeholder="Custo por unidade">
 
 <button onclick="gerar()">Gerar Cardápio</button>
@@ -114,9 +147,14 @@ letter-spacing:5px;
 
 <div class="result" id="resultado"></div>
 
-<button onclick="copiar()">📋 Copiar</button>
-<button onclick="whatsapp()">📲 Enviar WhatsApp</button>
+<div class="valor" id="valor"></div>
+
+<button onclick="copiar()">📋 Copiar Resultado</button>
+
+<button onclick="whatsapp()">📲 Enviar para WhatsApp</button>
+
 <button onclick="limpar()">🗑 Limpar</button>
+
 <button onclick="voltar()">⬅ Voltar</button>
 
 <div id="checkout"></div>
@@ -131,17 +169,17 @@ function atualizarBarra(){
 
 let restante = 3 - testes
 
-let barra = ""
+let barra=""
 
 for(let i=0;i<restante;i++){
-barra += "🟩"
+barra+="🟩"
 }
 
 for(let i=restante;i<3;i++){
-barra += "⬜"
+barra+="⬜"
 }
 
-document.getElementById("barra").innerText = barra
+document.getElementById("barra").innerText=barra
 
 }
 
@@ -151,31 +189,34 @@ async function gerar(){
 
 testes++
 
-localStorage.setItem("testes", testes)
+localStorage.setItem("testes",testes)
 
 atualizarBarra()
 
-if(testes > 3){
+if(testes>3){
 
-document.getElementById("resultado").innerHTML =
+document.getElementById("resultado").innerHTML=
 "🚫 Testes gratuitos finalizados\n\nVocê já utilizou os 3 testes gratuitos."
 
-document.getElementById("checkout").innerHTML =
-'<button class="checkout" onclick="checkout()">🔥 QUERO DESBLOQUEAR O CURSO</button>'
+document.getElementById("checkout").innerHTML=
+'<button class="checkout" onclick="checkout()">🔥 DESBLOQUEAR TODAS AS FERRAMENTAS</button>'
 
 return
 }
 
 document.getElementById("loader").style.display="block"
+
 document.getElementById("resultado").innerText=""
 
-await new Promise(resolve => setTimeout(resolve,1200))
+document.getElementById("valor").innerText=""
 
-const tipo = document.getElementById("tipo").value
-const meta = document.getElementById("meta").value
-const custo = document.getElementById("custo").value
+await new Promise(resolve=>setTimeout(resolve,1200))
 
-const res = await fetch("/api/cardapio",{
+const tipo=document.getElementById("tipo").value
+const meta=document.getElementById("meta").value
+const custo=document.getElementById("custo").value
+
+const res=await fetch("/api/cardapio",{
 method:"POST",
 headers:{
 "Content-Type":"application/json"
@@ -183,37 +224,60 @@ headers:{
 body:JSON.stringify({tipo,meta,custo})
 })
 
-const data = await res.json()
+const data=await res.json()
 
 document.getElementById("loader").style.display="none"
 
-document.getElementById("resultado").innerText = data.resultado
+document.getElementById("resultado").innerText=data.resultado
+
+if(meta){
+
+let lucroMes = meta*30
+
+document.getElementById("valor").innerHTML=
+"💰 Se você vender todos os dias pode faturar cerca de <b>R$ "+lucroMes+"</b> por mês."
+
+}
 
 }
 
 function copiar(){
+
 navigator.clipboard.writeText(
 document.getElementById("resultado").innerText
 )
+
+alert("Resultado copiado!")
+
 }
 
 function whatsapp(){
-let texto = encodeURIComponent(
+
+let texto=encodeURIComponent(
 document.getElementById("resultado").innerText
 )
+
 window.open("https://wa.me/?text="+texto)
+
 }
 
 function limpar(){
+
 document.getElementById("resultado").innerText=""
+document.getElementById("valor").innerText=""
+
 }
 
 function voltar(){
+
 window.location.href="app.html"
+
 }
 
 function checkout(){
-window.open("SEU_LINK_HOTMART_AQUI")
+
+window.open("https://pay.hotmart.com/K92944551N")
+
 }
 
 </script>
