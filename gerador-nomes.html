@@ -31,6 +31,10 @@ box-shadow:0 10px 20px rgba(0,0,0,0.1);
 text-align:center;
 }
 
+h2{
+margin-bottom:10px;
+}
+
 input{
 width:100%;
 padding:10px;
@@ -63,7 +67,7 @@ text-align:left;
 
 #loader{
 display:none;
-margin-top:20px;
+margin-top:15px;
 font-weight:bold;
 color:#ff4d4d;
 animation:pulse 1.5s infinite;
@@ -114,7 +118,7 @@ animation:pulsar 1.2s infinite;
 <div class="result" id="resultado"></div>
 
 <button onclick="copiar()">📋 Copiar</button>
-<button onclick="whatsapp()">📲 Enviar WhatsApp</button>
+<button onclick="whatsapp()">📲 WhatsApp</button>
 <button onclick="limpar()">🗑 Limpar</button>
 <button onclick="voltar()">⬅ Voltar</button>
 
@@ -126,32 +130,30 @@ animation:pulsar 1.2s infinite;
 
 let testes = localStorage.getItem("testes") || 0
 
-function barra(){
+function atualizarBarra(){
 
-let restante = 3-testes
+let restante = 3 - testes
 
-let b=""
+let barra=""
 
-for(let i=0;i<restante;i++){b+="🟩"}
-for(let i=restante;i<3;i++){b+="⬜"}
+for(let i=0;i<restante;i++){barra+="🟩"}
+for(let i=restante;i<3;i++){barra+="⬜"}
 
-document.getElementById("barra").innerText=b
+document.getElementById("barra").innerText = barra
 
 }
 
-barra()
+atualizarBarra()
 
 async function gerar(){
 
 testes++
 localStorage.setItem("testes",testes)
-
-barra()
+atualizarBarra()
 
 if(testes>3){
 
-document.getElementById("resultado").innerHTML=
-"🚫 Testes gratuitos finalizados."
+document.getElementById("resultado").innerHTML="🚫 Testes gratuitos finalizados."
 
 document.getElementById("checkout").innerHTML=
 '<button class="checkout" onclick="checkout()">🔥 DESBLOQUEAR TODAS AS FERRAMENTAS</button>'
@@ -162,7 +164,7 @@ return
 
 document.getElementById("loader").style.display="block"
 
-await new Promise(r=>setTimeout(r,1200))
+await new Promise(resolve=>setTimeout(resolve,1200))
 
 const tipo=document.getElementById("tipo").value
 
@@ -185,8 +187,8 @@ navigator.clipboard.writeText(document.getElementById("resultado").innerText)
 }
 
 function whatsapp(){
-let t=encodeURIComponent(document.getElementById("resultado").innerText)
-window.open("https://wa.me/?text="+t)
+let texto=encodeURIComponent(document.getElementById("resultado").innerText)
+window.open("https://wa.me/?text="+texto)
 }
 
 function limpar(){
@@ -198,7 +200,7 @@ window.location.href="app.html"
 }
 
 function checkout(){
-window.open("https://pay.hotmart.com/K92944551N")
+window.open("https://pay.hotmart.com/K92944551N?off=m4vo1hl6&checkoutMode=10","_blank")
 }
 
 </script>
