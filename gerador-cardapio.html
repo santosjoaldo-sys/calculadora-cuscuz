@@ -139,8 +139,8 @@ document.getElementById("resultado").innerHTML = `
 
 <p>Você já utilizou os 3 testes gratuitos.</p>
 
-<a href="https://pay.hotmart.com/K92944551N?off=m4vo1hl6&checkoutMode=10" 
-style="background:#ff7a00;color:white;padding:12px;border-radius:6px;text-decoration:none">
+<a href="https://pay.hotmart.com/K92944551N?off=m4vo1hl6&checkoutMode=10"
+style="background:#ff7a00;color:white;padding:12px;border-radius:6px;text-decoration:none;display:inline-block;margin-top:10px">
 
 🔥 QUERO COMPRAR O CURSO
 
@@ -187,6 +187,8 @@ const tipo = document.getElementById("tipo").value;
 const meta = document.getElementById("meta").value;
 const custo = document.getElementById("custo").value;
 
+try{
+
 const res = await fetch("/api/cardapio",{
 method:"POST",
 headers:{
@@ -210,6 +212,13 @@ html += `<div class="card">${linha}</div>`;
 });
 
 document.getElementById("resultado").innerHTML = html;
+
+}catch(e){
+
+document.getElementById("resultado").innerHTML =
+"<div class='card'>Erro ao gerar cardápio. Tente novamente.</div>";
+
+}
 
 }
 
@@ -241,7 +250,13 @@ document.getElementById("resultado").innerHTML="";
 
 function voltar(){
 
-window.location.href="index.html";
+const params = new URLSearchParams(window.location.search);
+
+if(params.get("aluno") === "1"){
+window.location.href="app.html?aluno=1";
+}else{
+window.location.href="app.html";
+}
 
 }
 
