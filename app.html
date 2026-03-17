@@ -70,16 +70,42 @@ color:white;
 
 <p>Descubra o que vender e quanto você pode ganhar</p>
 
-<a href="index.html">
-<button class="calc">📊 Calculadora de Lucro</button>
-</a>
+<button class="calc" onclick="abrirCalculadora()">
+📊 Calculadora de Lucro
+</button>
 
-<a href="gerador-cardapio.html">
-<button class="cardapio">🍲 Gerador de Cardápio Lucrativo</button>
-</a>
+<button class="cardapio" onclick="abrirCardapio()">
+🍲 Gerador de Cardápio Lucrativo
+</button>
 
 </div>
 
-</body>
+<script>
 
+const params = new URLSearchParams(window.location.search);
+const aluno = params.get("aluno");
+
+function abrirCalculadora(){
+
+if(aluno === "1"){
+window.location.href="santosjoaldo-sys/calculadora-cuscuz?aluno=1";
+}else{
+window.location.href="santosjoaldo-sys/calculadora-cuscuz";
+}
+
+}
+
+function abrirCardapio(){
+
+if(aluno === "1"){
+window.location.href="gerador-cardapio.html?aluno=1";
+}else{
+window.location.href="gerador-cardapio.html";
+}
+
+}
+
+</script>
+
+</body>
 </html>
