@@ -38,22 +38,34 @@ margin-bottom:20px;
 
 input{
 width:100%;
-padding:10px;
+padding:12px;
 margin-top:10px;
 border:1px solid #ddd;
 border-radius:6px;
+font-size:15px;
 }
 
 button{
 width:100%;
 padding:12px;
 margin-top:12px;
-background:#ff7a00;
-color:white;
 border:none;
 border-radius:6px;
 cursor:pointer;
 font-size:16px;
+color:white;
+}
+
+.calcular{
+background:#ff7a00;
+}
+
+.actions button{
+background:#6a5acd;
+}
+
+.voltar{
+background:#888;
 }
 
 .result{
@@ -62,10 +74,11 @@ background:#f7f7f7;
 padding:15px;
 border-radius:8px;
 text-align:left;
+min-height:40px;
 }
 
-.voltar{
-background:#888;
+button:hover{
+opacity:0.9;
 }
 
 </style>
@@ -84,11 +97,21 @@ background:#888;
 
 <input id="quantidade" placeholder="Quantidade vendida por dia">
 
-<button onclick="calcular()">Calcular Lucro</button>
+<button class="calcular" onclick="calcular()">Calcular Lucro</button>
 
 <div class="result" id="resultado"></div>
 
+<div class="actions">
+
+<button onclick="copiar()">📋 Copiar Resultado</button>
+
+<button onclick="whatsapp()">📲 Enviar para WhatsApp</button>
+
+<button onclick="limpar()">🗑 Limpar</button>
+
 <button class="voltar" onclick="voltar()">⬅ Voltar</button>
+
+</div>
 
 </div>
 
@@ -116,20 +139,50 @@ const lucroMes = lucroDia * 30;
 document.getElementById("resultado").innerHTML =
 
 `
-<b>💰 Lucro por unidade:</b> R$ ${lucroUnitario.toFixed(2)} <br><br>
+💰 Lucro por unidade: R$ ${lucroUnitario.toFixed(2)}
 
-<b>📅 Lucro por dia:</b> R$ ${lucroDia.toFixed(2)} <br><br>
+📅 Lucro por dia: R$ ${lucroDia.toFixed(2)}
 
-<b>🚀 Lucro por mês:</b> R$ ${lucroMes.toFixed(2)}
+🚀 Lucro por mês: R$ ${lucroMes.toFixed(2)}
 `;
+
+}
+
+function copiar(){
+
+const texto=document.getElementById("resultado").innerText;
+
+navigator.clipboard.writeText(texto);
+
+alert("Resultado copiado!");
+
+}
+
+function whatsapp(){
+
+const texto=document.getElementById("resultado").innerText;
+
+const url="https://wa.me/?text="+encodeURIComponent(texto);
+
+window.open(url);
+
+}
+
+function limpar(){
+
+document.getElementById("resultado").innerHTML="";
+
+document.getElementById("custo").value="";
+document.getElementById("preco").value="";
+document.getElementById("quantidade").value="";
 
 }
 
 function voltar(){
 
-const params = new URLSearchParams(window.location.search);
+const params=new URLSearchParams(window.location.search);
 
-if(params.get("aluno") === "1"){
+if(params.get("aluno")==="1"){
 window.location.href="../app.html?aluno=1";
 }else{
 window.location.href="../app.html";
