@@ -1,59 +1,47 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-
 <head>
 
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Gerador de Cardápio Lucrativo</title>
+<title>Gerador de Cardápio</title>
 
 <style>
 
 body{
 font-family:Arial;
-background:#f5e9d8;
+background:#fff5e6;
 display:flex;
 justify-content:center;
 align-items:center;
-min-height:100vh;
+height:100vh;
 margin:0;
-padding:20px;
 }
 
 .container{
 background:white;
-padding:30px;
-width:100%;
-max-width:420px;
+padding:25px;
+width:90%;
+max-width:450px;
 border-radius:12px;
 box-shadow:0 10px 20px rgba(0,0,0,0.1);
-}
-
-h2{
 text-align:center;
-margin-bottom:10px;
-}
-
-#contador{
-text-align:center;
-margin-bottom:10px;
-color:#555;
 }
 
 input{
 width:100%;
 padding:10px;
 margin-top:10px;
-border:1px solid #ddd;
 border-radius:6px;
+border:1px solid #ddd;
 }
 
 button{
 width:100%;
 padding:12px;
-margin-top:12px;
-background:#ff7a00;
+margin-top:10px;
+background:#6a5acd;
 color:white;
 border:none;
 border-radius:6px;
@@ -62,23 +50,12 @@ cursor:pointer;
 
 .result{
 margin-top:20px;
+text-align:left;
 }
 
-.card{
-background:#f7f7f7;
-padding:12px;
-margin-bottom:10px;
-border-radius:8px;
-box-shadow:0 3px 8px rgba(0,0,0,0.1);
-}
-
-.actions button{
-background:#6a5acd;
-margin-top:8px;
-}
-
-.voltar{
-background:#888;
+.checkout{
+margin-top:20px;
+background:#ff7a00;
 }
 
 </style>
@@ -91,129 +68,57 @@ background:#888;
 
 <h2>🍲 Gerador de Cardápio Lucrativo</h2>
 
-<div id="contador"></div>
+<p id="contador"></p>
 
 <input id="tipo" placeholder="Digite o tipo de comida">
-
 <input id="meta" placeholder="Meta diária">
-
 <input id="custo" placeholder="Custo por unidade">
 
 <button onclick="gerar()">Gerar Cardápio</button>
 
 <div class="result" id="resultado"></div>
 
-<div class="actions">
-
 <button onclick="copiar()">📋 Copiar</button>
-
 <button onclick="whatsapp()">📲 Enviar WhatsApp</button>
-
 <button onclick="limpar()">🗑 Limpar</button>
+<button onclick="voltar()">⬅ Voltar</button>
 
-<button class="voltar" onclick="voltar()">⬅ Voltar</button>
-
-</div>
+<div id="checkout"></div>
 
 </div>
 
 <script>
 
-const LIMITE_USOS = 3;
+let testes = localStorage.getItem("testes") || 0
 
-function obterUsos(){
-
-return parseInt(localStorage.getItem("usos_app") || "0");
-
-}
-
-function mostrarRestantes(){
-
-const usos = obterUsos();
-
-const restantes = LIMITE_USOS - usos;
-
-if(restantes > 0){
-
-document.getElementById("contador").innerHTML =
-`⚡ Você ainda tem <b>${restantes}</b> teste(s) gratuito(s).`;
-
-}
-
-}
-
-function verificarUso(){
-
-const params = new URLSearchParams(window.location.search);
-
-if(params.get("aluno") === "1"){
-return true;
-}
-
-let usos = obterUsos();
-
-if(usos >= LIMITE_USOS){
-
-document.getElementById("resultado").innerHTML = `
-
-<div class="card">
-
-<h3>🚫 Testes gratuitos finalizados</h3>
-
-<p>Você já utilizou os 3 testes gratuitos.</p>
-
-<a href="https://pay.hotmart.com/K92944551N?off=m4vo1hl6&checkoutMode=10"
-style="background:#ff7a00;color:white;padding:12px;border-radius:6px;text-decoration:none;display:inline-block;margin-top:10px">
-
-🔥 QUERO DESBLOQUEAR O CURSO
-
-</a>
-
-</div>
-`;
-
-return false;
-
-}
-
-return true;
-
-}
-
-function registrarUso(){
-
-const params = new URLSearchParams(window.location.search);
-
-if(params.get("aluno") === "1"){
-return;
-}
-
-let usos = obterUsos();
-
-usos++;
-
-localStorage.setItem("usos_app", usos);
-
-}
+document.getElementById("contador").innerText =
+"⚡ Você ainda tem " + (3 - testes) + " teste(s) gratuito(s)."
 
 async function gerar(){
 
-if(!verificarUso()){
-return;
+testes++
+
+localStorage.setItem("testes", testes)
+
+if(testes > 3){
+
+document.getElementById("resultado").innerHTML = `
+<h3>🚫 Testes gratuitos finalizados</h3>
+<p>Você já utilizou os 3 testes gratuitos.</p>
+`
+
+document.getElementById("checkout").innerHTML = `
+<button class="checkout" onclick="checkout()">
+🔥 QUERO DESBLOQUEAR O CURSO
+</button>
+`
+
+return
 }
 
-const tipo = document.getElementById("tipo").value.trim();
-const meta = document.getElementById("meta").value.trim();
-const custo = document.getElementById("custo").value.trim();
-
-if(!tipo){
-alert("Digite o tipo de comida.");
-return;
-}
-
-registrarUso();
-
-try{
+const tipo = document.getElementById("tipo").value
+const meta = document.getElementById("meta").value
+const custo = document.getElementById("custo").value
 
 const res = await fetch("/api/cardapio",{
 method:"POST",
@@ -221,74 +126,50 @@ headers:{
 "Content-Type":"application/json"
 },
 body:JSON.stringify({tipo,meta,custo})
-});
+})
 
-const data = await res.json();
+const data = await res.json()
 
-const linhas = data.resultado.split("\n");
+document.getElementById("resultado").innerText = data.resultado
 
-let html = "";
-
-linhas.forEach(linha => {
-
-if(linha.trim()==="") return;
-
-html += `<div class="card">${linha}</div>`;
-
-});
-
-document.getElementById("resultado").innerHTML = html;
-
-mostrarRestantes();
-
-}catch(e){
-
-document.getElementById("resultado").innerHTML =
-"<div class='card'>Erro ao gerar cardápio. Tente novamente.</div>";
-
-}
+document.getElementById("contador").innerText =
+"⚡ Você ainda tem " + (3 - testes) + " teste(s) gratuito(s)."
 
 }
 
 function copiar(){
-
-const texto = document.getElementById("resultado").innerText;
-
-navigator.clipboard.writeText(texto);
-
-alert("Resultado copiado!");
-
+navigator.clipboard.writeText(
+document.getElementById("resultado").innerText
+)
 }
 
 function whatsapp(){
 
-const texto = document.getElementById("resultado").innerText;
+let texto = encodeURIComponent(
+document.getElementById("resultado").innerText
+)
 
-const url = "https://wa.me/?text=" + encodeURIComponent(texto);
-
-window.open(url);
+window.open("https://wa.me/?text=" + texto)
 
 }
 
 function limpar(){
 
-document.getElementById("resultado").innerHTML="";
+document.getElementById("resultado").innerText = ""
 
 }
 
 function voltar(){
 
-const params = new URLSearchParams(window.location.search);
-
-if(params.get("aluno") === "1"){
-window.location.href="app.html?aluno=1";
-}else{
-window.location.href="app.html";
-}
+window.location.href="app.html"
 
 }
 
-mostrarRestantes();
+function checkout(){
+
+window.open("SEU_LINK_HOTMART_AQUI")
+
+}
 
 </script>
 
