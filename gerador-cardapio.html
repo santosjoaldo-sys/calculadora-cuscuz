@@ -66,19 +66,13 @@ border-radius:8px;
 box-shadow:0 3px 8px rgba(0,0,0,0.1);
 }
 
-.comprar{
-margin-top:20px;
-text-align:center;
+.actions button{
+background:#6a5acd;
+margin-top:8px;
 }
 
-.comprar a{
-display:inline-block;
-background:#ff7a00;
-color:white;
-padding:14px;
-border-radius:8px;
-text-decoration:none;
-font-size:18px;
+.voltar{
+background:#888;
 }
 
 </style>
@@ -91,15 +85,27 @@ font-size:18px;
 
 <h2>🍲 Gerador de Cardápio Lucrativo</h2>
 
-<input id="tipo" placeholder="Digite o tipo de comida (ex: Pizza, Cuscuz, Marmita)">
+<input id="tipo" placeholder="Digite o tipo de comida">
 
-<input id="meta" placeholder="Meta diária (ex: 200)">
+<input id="meta" placeholder="Meta diária">
 
-<input id="custo" placeholder="Custo por unidade (ex: 8)">
+<input id="custo" placeholder="Custo por unidade">
 
 <button onclick="gerar()">Gerar Cardápio</button>
 
 <div class="result" id="resultado"></div>
+
+<div class="actions">
+
+<button onclick="copiar()">📋 Copiar</button>
+
+<button onclick="whatsapp()">📲 Enviar WhatsApp</button>
+
+<button onclick="limpar()">🗑 Limpar</button>
+
+<button class="voltar" onclick="voltar()">⬅ Voltar</button>
+
+</div>
 
 </div>
 
@@ -111,9 +117,7 @@ function verificarUso(){
 
 const params = new URLSearchParams(window.location.search);
 
-const aluno = params.get("aluno");
-
-if(aluno === "1"){
+if(params.get("aluno") === "1"){
 return true;
 }
 
@@ -133,36 +137,31 @@ document.getElementById("resultado").innerHTML = `
 
 <h3>🚫 Testes gratuitos finalizados</h3>
 
-<p>Você já utilizou os 3 testes gratuitos da ferramenta.</p>
+<p>Você já utilizou os 3 testes gratuitos.</p>
 
-<p>Para continuar usando e aprender a vender essas ideias:</p>
-
-<div class="comprar">
-
-<a href="https://pay.hotmart.com/K92944551N?off=m4vo1hl6&checkoutMode=10">
+<a href="https://pay.hotmart.com/K92944551N?off=m4vo1hl6&checkoutMode=10" 
+style="background:#ff7a00;color:white;padding:12px;border-radius:6px;text-decoration:none">
 
 🔥 QUERO COMPRAR O CURSO
 
 </a>
 
 </div>
-
-</div>
 `;
 
 return false;
+
 }
 
 return true;
+
 }
 
 function registrarUso(){
 
 const params = new URLSearchParams(window.location.search);
 
-const aluno = params.get("aluno");
-
-if(aluno === "1"){
+if(params.get("aluno") === "1"){
 return;
 }
 
@@ -172,7 +171,7 @@ usos = parseInt(usos);
 
 usos++;
 
-localStorage.setItem("usos_app", usos);
+localStorage.setItem("usos_app",usos);
 
 }
 
@@ -204,21 +203,45 @@ let html = "";
 
 linhas.forEach(linha => {
 
-if(linha.trim() === "") return;
+if(linha.trim()==="") return;
 
-let icone = "🍲";
-
-const texto = linha.toLowerCase();
-
-if(texto.includes("preço")) icone = "💰";
-if(texto.includes("unidades")) icone = "📊";
-if(texto.includes("meta")) icone = "🎯";
-
-html += `<div class="card">${icone} ${linha}</div>`;
+html += `<div class="card">${linha}</div>`;
 
 });
 
 document.getElementById("resultado").innerHTML = html;
+
+}
+
+function copiar(){
+
+const texto = document.getElementById("resultado").innerText;
+
+navigator.clipboard.writeText(texto);
+
+alert("Resultado copiado!");
+
+}
+
+function whatsapp(){
+
+const texto = document.getElementById("resultado").innerText;
+
+const url = "https://wa.me/?text=" + encodeURIComponent(texto);
+
+window.open(url);
+
+}
+
+function limpar(){
+
+document.getElementById("resultado").innerHTML="";
+
+}
+
+function voltar(){
+
+window.location.href="index.html";
 
 }
 
