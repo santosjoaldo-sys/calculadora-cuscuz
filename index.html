@@ -57,10 +57,7 @@ cursor:pointer;
 color:white;
 }
 
-.cardapio{background:#ff7a00;}
-.nomes{background:#ff4d4d;}
-.combos{background:#6a5acd;}
-.post{background:#2ecc71;}
+.teste{background:#ff7a00;}
 
 .botao:hover{
 opacity:0.9;
@@ -85,23 +82,11 @@ color:#888;
 </div>
 
 <div class="subtitulo">
-Ferramentas inteligentes para quem quer ganhar dinheiro vendendo comida.
+Ferramenta inteligente para descobrir comidas lucrativas para vender.
 </div>
 
-<button class="botao cardapio" onclick="abrir('gerador-cardapio.html')">
-🍲 Gerador de Cardápio Lucrativo
-</button>
-
-<button class="botao nomes" onclick="abrir('gerador-nomes.html')">
-🔥 Gerador de Nomes de Pratos
-</button>
-
-<button class="botao combos" onclick="abrir('gerador-combos.html')">
-📦 Gerador de Combos Lucrativos
-</button>
-
-<button class="botao post" onclick="abrir('gerador-post.html')">
-📣 Gerador de Post para Instagram
+<button class="botao teste" onclick="abrir()">
+🚀 TESTAR FERRAMENTA GRÁTIS
 </button>
 
 <div class="footer">
@@ -115,12 +100,12 @@ Powered by Comida Lucrativa AI
 const params = new URLSearchParams(window.location.search);
 const aluno = params.get("aluno");
 
-function abrir(pagina){
+function abrir(){
 
 if(aluno === "1"){
-window.location.href = pagina + "?aluno=1";
+window.location.href = "app.html?aluno=1";
 }else{
-window.location.href = pagina;
+window.location.href = "acesso.html";
 }
 
 }
