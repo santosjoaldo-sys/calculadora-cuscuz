@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-
 <head>
 
 <meta charset="UTF-8">
@@ -10,73 +9,17 @@
 
 <style>
 
-body{
-font-family:Arial;
-background:#fff5e6;
-display:flex;
-justify-content:center;
-align-items:flex-start;
-min-height:100vh;
-padding:40px 0;
-margin:0;
-}
+body{font-family:Arial;background:#fff5e6;display:flex;justify-content:center;align-items:flex-start;min-height:100vh;padding:40px 0;margin:0;}
 
-.container{
-background:white;
-padding:25px;
-width:90%;
-max-width:450px;
-border-radius:12px;
-box-shadow:0 10px 20px rgba(0,0,0,0.1);
-text-align:center;
-}
+.container{background:white;padding:25px;width:90%;max-width:450px;border-radius:12px;box-shadow:0 10px 20px rgba(0,0,0,0.1);text-align:center;}
 
-input{
-width:100%;
-padding:10px;
-margin-top:10px;
-border-radius:6px;
-border:1px solid #ddd;
-}
+input{width:100%;padding:10px;margin-top:10px;border-radius:6px;border:1px solid #ddd;}
 
-button{
-width:100%;
-padding:12px;
-margin-top:12px;
-background:#6a5acd;
-color:white;
-border:none;
-border-radius:6px;
-cursor:pointer;
-}
+button{width:100%;padding:12px;margin-top:12px;background:#6a5acd;color:white;border:none;border-radius:6px;}
 
-.result{
-margin-top:20px;
-background:#fafafa;
-padding:15px;
-border-radius:8px;
-max-height:300px;
-overflow:auto;
-white-space:pre-line;
-text-align:left;
-}
+.result{margin-top:20px;background:#fafafa;padding:15px;border-radius:8px;max-height:300px;overflow:auto;white-space:pre-line;text-align:left;}
 
-#loader{
-display:none;
-margin-top:15px;
-animation:pulse 1.5s infinite;
-}
-
-.barra{
-font-size:22px;
-letter-spacing:5px;
-margin-top:10px;
-}
-
-.checkout{
-background:#ff7a00;
-animation:pulsar 1.2s infinite;
-}
+.barra{font-size:22px;letter-spacing:5px;margin-top:10px;}
 
 </style>
 
@@ -86,7 +29,7 @@ animation:pulsar 1.2s infinite;
 
 <div class="container">
 
-<h2>📦 Gerador de Combos Lucrativos</h2>
+<h2>📦 Gerador de Combos</h2>
 
 <div>Testes restantes</div>
 <div id="barra" class="barra"></div>
@@ -110,11 +53,16 @@ animation:pulsar 1.2s infinite;
 
 <script>
 
-let testes=localStorage.getItem("testes")||0
+const params=new URLSearchParams(window.location.search);
+const aluno=params.get("aluno");
 
-function atualizarBarra(){
+let testes=localStorage.getItem("testes")||0;
 
-let restante=3-testes
+if(aluno==="1"){testes=0;}
+
+function barra(){
+
+let restante=aluno==="1"?3:3-testes
 
 let b=""
 
@@ -122,31 +70,27 @@ for(let i=0;i<restante;i++){b+="🟩"}
 for(let i=restante;i<3;i++){b+="⬜"}
 
 document.getElementById("barra").innerText=b
-
 }
 
-atualizarBarra()
+barra()
 
 async function gerar(){
 
+if(aluno!=="1"){
 testes++
 localStorage.setItem("testes",testes)
-atualizarBarra()
-
-if(testes>3){
-
-document.getElementById("resultado").innerHTML="🚫 Testes finalizados."
-
-document.getElementById("checkout").innerHTML=
-'<button class="checkout" onclick="checkout()">🔥 DESBLOQUEAR</button>'
-
-return
-
 }
 
-document.getElementById("loader").style.display="block"
+barra()
 
-await new Promise(resolve=>setTimeout(resolve,1200))
+if(testes>3 && aluno!=="1"){
+
+resultado.innerHTML="🚫 Testes finalizados."
+
+checkout.innerHTML='<button onclick="checkout()">🔥 DESBLOQUEAR</button>'
+
+return
+}
 
 const tipo=document.getElementById("tipo").value
 
@@ -158,27 +102,21 @@ body:JSON.stringify({tipo})
 
 const data=await res.json()
 
-document.getElementById("loader").style.display="none"
-
-document.getElementById("resultado").innerText=data.resultado
+resultado.innerText=data.resultado
 
 }
 
-function copiar(){
-navigator.clipboard.writeText(document.getElementById("resultado").innerText)
-}
+function copiar(){navigator.clipboard.writeText(resultado.innerText)}
 
 function whatsapp(){
-let t=encodeURIComponent(document.getElementById("resultado").innerText)
+let t=encodeURIComponent(resultado.innerText)
 window.open("https://wa.me/?text="+t)
 }
 
-function limpar(){
-document.getElementById("resultado").innerText=""
-}
+function limpar(){resultado.innerText=""}
 
 function voltar(){
-window.location.href="app.html"
+window.location.href="app.html"+(aluno==="1"?"?aluno=1":"")
 }
 
 function checkout(){
