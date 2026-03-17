@@ -6,7 +6,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Gerador de Nomes Lucrativos</title>
+<title>Gerador de Nomes</title>
 
 <style>
 
@@ -29,10 +29,6 @@ max-width:450px;
 border-radius:12px;
 box-shadow:0 10px 20px rgba(0,0,0,0.1);
 text-align:center;
-}
-
-h2{
-margin-bottom:10px;
 }
 
 input{
@@ -65,24 +61,17 @@ white-space:pre-line;
 text-align:left;
 }
 
-#loader{
-display:none;
-margin-top:15px;
-font-weight:bold;
-color:#ff4d4d;
-animation:pulse 1.5s infinite;
-}
-
-@keyframes pulse{
-0%{opacity:0.3}
-50%{opacity:1}
-100%{opacity:0.3}
-}
-
 .barra{
 font-size:22px;
 letter-spacing:5px;
 margin-top:10px;
+}
+
+#loader{
+display:none;
+margin-top:15px;
+font-weight:bold;
+animation:pulse 1.5s infinite;
 }
 
 .checkout{
@@ -90,10 +79,10 @@ background:#ff7a00;
 animation:pulsar 1.2s infinite;
 }
 
-@keyframes pulsar{
-0%{transform:scale(1)}
-50%{transform:scale(1.05)}
-100%{transform:scale(1)}
+@keyframes pulse{
+0%{opacity:0.3}
+50%{opacity:1}
+100%{opacity:0.3}
 }
 
 </style>
@@ -104,16 +93,16 @@ animation:pulsar 1.2s infinite;
 
 <div class="container">
 
-<h2>🔥 Gerador de Nomes Lucrativos</h2>
+<h2>🔥 Gerador de Nomes</h2>
 
 <div>Testes gratuitos restantes</div>
 <div id="barra" class="barra"></div>
 
-<input id="tipo" placeholder="Digite o tipo de comida">
+<input id="tipo" placeholder="Tipo de comida">
 
 <button onclick="gerar()">Gerar Nomes</button>
 
-<div id="loader">🤖 Criando nomes irresistíveis...</div>
+<div id="loader">🤖 Criando nomes...</div>
 
 <div class="result" id="resultado"></div>
 
@@ -128,43 +117,50 @@ animation:pulsar 1.2s infinite;
 
 <script>
 
-let testes = localStorage.getItem("testes") || 0
+const params = new URLSearchParams(window.location.search);
+const aluno = params.get("aluno");
 
-function atualizarBarra(){
+let testes = localStorage.getItem("testes") || 0;
 
-let restante = 3 - testes
+if(aluno==="1"){testes=0;}
 
-let barra=""
+function barra(){
 
-for(let i=0;i<restante;i++){barra+="🟩"}
-for(let i=restante;i<3;i++){barra+="⬜"}
+let restante = aluno==="1"?3:3-testes
 
-document.getElementById("barra").innerText = barra
+let b=""
+
+for(let i=0;i<restante;i++){b+="🟩"}
+for(let i=restante;i<3;i++){b+="⬜"}
+
+document.getElementById("barra").innerText=b
 
 }
 
-atualizarBarra()
+barra()
 
 async function gerar(){
 
+if(aluno!=="1"){
 testes++
 localStorage.setItem("testes",testes)
-atualizarBarra()
+}
 
-if(testes>3){
+barra()
 
-document.getElementById("resultado").innerHTML="🚫 Testes gratuitos finalizados."
+if(testes>3 && aluno!=="1"){
+
+document.getElementById("resultado").innerHTML="🚫 Testes finalizados."
 
 document.getElementById("checkout").innerHTML=
-'<button class="checkout" onclick="checkout()">🔥 DESBLOQUEAR TODAS AS FERRAMENTAS</button>'
+'<button class="checkout" onclick="checkout()">🔥 DESBLOQUEAR</button>'
 
 return
-
 }
 
 document.getElementById("loader").style.display="block"
 
-await new Promise(resolve=>setTimeout(resolve,1200))
+await new Promise(r=>setTimeout(r,1200))
 
 const tipo=document.getElementById("tipo").value
 
@@ -182,21 +178,17 @@ document.getElementById("resultado").innerText=data.resultado
 
 }
 
-function copiar(){
-navigator.clipboard.writeText(document.getElementById("resultado").innerText)
-}
+function copiar(){navigator.clipboard.writeText(resultado.innerText)}
 
 function whatsapp(){
-let texto=encodeURIComponent(document.getElementById("resultado").innerText)
-window.open("https://wa.me/?text="+texto)
+let t=encodeURIComponent(resultado.innerText)
+window.open("https://wa.me/?text="+t)
 }
 
-function limpar(){
-document.getElementById("resultado").innerText=""
-}
+function limpar(){resultado.innerText=""}
 
 function voltar(){
-window.location.href="app.html"
+window.location.href="app.html"+(aluno==="1"?"?aluno=1":"")
 }
 
 function checkout(){
