@@ -6,7 +6,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Gerador de Nomes</title>
+<title>Gerador de Nomes de Pratos</title>
 
 <style>
 
@@ -30,6 +30,11 @@ border-radius:12px;
 box-shadow:0 10px 20px rgba(0,0,0,0.1);
 }
 
+h2{
+text-align:center;
+margin-bottom:20px;
+}
+
 input{
 width:100%;
 padding:10px;
@@ -49,11 +54,16 @@ border-radius:6px;
 cursor:pointer;
 }
 
+.result{
+margin-top:20px;
+}
+
 .card{
 background:#f7f7f7;
 padding:12px;
-margin-top:10px;
+margin-bottom:10px;
 border-radius:8px;
+box-shadow:0 3px 8px rgba(0,0,0,0.1);
 }
 
 .actions button{
@@ -75,11 +85,11 @@ background:#888;
 
 <h2>🔥 Gerador de Nomes de Pratos</h2>
 
-<input id="produto" placeholder="Ex: Cuscuz Gourmet">
+<input id="tipo" placeholder="Digite o tipo de comida">
 
 <button onclick="gerar()">Gerar Nomes</button>
 
-<div id="resultado"></div>
+<div class="result" id="resultado"></div>
 
 <div class="actions">
 
@@ -123,8 +133,10 @@ document.getElementById("resultado").innerHTML = `
 
 <h3>🚫 Testes gratuitos finalizados</h3>
 
-<a href="https://pay.hotmart.com/K92944551N?off=m4vo1hl6&checkoutMode=10" 
-style="background:#ff7a00;color:white;padding:12px;border-radius:6px;text-decoration:none">
+<p>Você já utilizou os 3 testes gratuitos.</p>
+
+<a href="https://pay.hotmart.com/K92944551N?off=m4vo1hl6&checkoutMode=10"
+style="background:#ff7a00;color:white;padding:12px;border-radius:6px;text-decoration:none;display:inline-block;margin-top:10px">
 
 🔥 QUERO COMPRAR O CURSO
 
@@ -161,41 +173,52 @@ localStorage.setItem("usos_app",usos);
 
 async function gerar(){
 
-if(!verificarUso()) return;
+if(!verificarUso()){
+return;
+}
 
 registrarUso();
 
-const produto = document.getElementById("produto").value;
+const tipo = document.getElementById("tipo").value;
+
+try{
 
 const res = await fetch("/api/nomes",{
 method:"POST",
 headers:{
 "Content-Type":"application/json"
 },
-body:JSON.stringify({produto})
+body:JSON.stringify({tipo})
 });
 
 const data = await res.json();
 
 const linhas = data.resultado.split("\n");
 
-let html="";
+let html = "";
 
-linhas.forEach(linha=>{
+linhas.forEach(linha => {
 
 if(linha.trim()==="") return;
 
-html += `<div class="card">🍲 ${linha}</div>`;
+html += `<div class="card">${linha}</div>`;
 
 });
 
 document.getElementById("resultado").innerHTML = html;
 
+}catch(e){
+
+document.getElementById("resultado").innerHTML =
+"<div class='card'>Erro ao gerar nomes. Tente novamente.</div>";
+
+}
+
 }
 
 function copiar(){
 
-const texto=document.getElementById("resultado").innerText;
+const texto = document.getElementById("resultado").innerText;
 
 navigator.clipboard.writeText(texto);
 
@@ -205,9 +228,11 @@ alert("Resultado copiado!");
 
 function whatsapp(){
 
-const texto=document.getElementById("resultado").innerText;
+const texto = document.getElementById("resultado").innerText;
 
-window.open("https://wa.me/?text="+encodeURIComponent(texto));
+const url = "https://wa.me/?text=" + encodeURIComponent(texto);
+
+window.open(url);
 
 }
 
@@ -219,7 +244,13 @@ document.getElementById("resultado").innerHTML="";
 
 function voltar(){
 
-window.location.href="index.html";
+const params = new URLSearchParams(window.location.search);
+
+if(params.get("aluno") === "1"){
+window.location.href="app.html?aluno=1";
+}else{
+window.location.href="app.html";
+}
 
 }
 
