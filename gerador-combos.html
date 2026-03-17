@@ -32,7 +32,13 @@ box-shadow:0 10px 20px rgba(0,0,0,0.1);
 
 h2{
 text-align:center;
-margin-bottom:20px;
+margin-bottom:10px;
+}
+
+#contador{
+text-align:center;
+margin-bottom:10px;
+color:#555;
 }
 
 input{
@@ -63,10 +69,12 @@ background:#f7f7f7;
 padding:12px;
 margin-bottom:10px;
 border-radius:8px;
+box-shadow:0 3px 8px rgba(0,0,0,0.1);
 }
 
 .actions button{
 background:#ff7a00;
+margin-top:8px;
 }
 
 .voltar{
@@ -83,6 +91,8 @@ background:#888;
 
 <h2>📦 Gerador de Combos Lucrativos</h2>
 
+<div id="contador"></div>
+
 <input id="tipo" placeholder="Tipo de comida">
 
 <button onclick="gerar()">Gerar Combos</button>
@@ -92,8 +102,11 @@ background:#888;
 <div class="actions">
 
 <button onclick="copiar()">📋 Copiar</button>
+
 <button onclick="whatsapp()">📲 Enviar WhatsApp</button>
+
 <button onclick="limpar()">🗑 Limpar</button>
+
 <button class="voltar" onclick="voltar()">⬅ Voltar</button>
 
 </div>
@@ -104,6 +117,27 @@ background:#888;
 
 const LIMITE_USOS = 3;
 
+function obterUsos(){
+
+return parseInt(localStorage.getItem("usos_app") || "0");
+
+}
+
+function mostrarRestantes(){
+
+const usos = obterUsos();
+
+const restantes = LIMITE_USOS - usos;
+
+if(restantes > 0){
+
+document.getElementById("contador").innerHTML =
+`⚡ Você ainda tem <b>${restantes}</b> teste(s) gratuito(s).`;
+
+}
+
+}
+
 function verificarUso(){
 
 const params = new URLSearchParams(window.location.search);
@@ -112,25 +146,25 @@ if(params.get("aluno") === "1"){
 return true;
 }
 
-let usos = localStorage.getItem("usos_combos");
-
-if(usos === null){
-localStorage.setItem("usos_combos",0);
-usos = 0;
-}
-
-usos = parseInt(usos);
+let usos = obterUsos();
 
 if(usos >= LIMITE_USOS){
 
 document.getElementById("resultado").innerHTML = `
+
 <div class="card">
+
 <h3>🚫 Testes gratuitos finalizados</h3>
+
 <p>Você já utilizou os 3 testes gratuitos.</p>
+
 <a href="https://pay.hotmart.com/K92944551N?off=m4vo1hl6&checkoutMode=10"
 style="background:#ff7a00;color:white;padding:12px;border-radius:6px;text-decoration:none;display:inline-block;margin-top:10px">
-🔥 QUERO COMPRAR O CURSO
+
+🔥 QUERO DESBLOQUEAR O CURSO
+
 </a>
+
 </div>
 `;
 
@@ -150,12 +184,11 @@ if(params.get("aluno") === "1"){
 return;
 }
 
-let usos = localStorage.getItem("usos_combos");
+let usos = obterUsos();
 
-usos = parseInt(usos);
 usos++;
 
-localStorage.setItem("usos_combos",usos);
+localStorage.setItem("usos_app", usos);
 
 }
 
@@ -178,7 +211,9 @@ try{
 
 const res = await fetch("/api/combos",{
 method:"POST",
-headers:{"Content-Type":"application/json"},
+headers:{
+"Content-Type":"application/json"
+},
 body:JSON.stringify({tipo})
 });
 
@@ -186,14 +221,19 @@ const data = await res.json();
 
 const linhas = data.resultado.split("\n");
 
-let html="";
+let html = "";
 
-linhas.forEach(linha=>{
+linhas.forEach(linha => {
+
 if(linha.trim()==="") return;
-html+=`<div class="card">${linha}</div>`;
+
+html += `<div class="card">${linha}</div>`;
+
 });
 
 document.getElementById("resultado").innerHTML = html;
+
+mostrarRestantes();
 
 }catch(e){
 
@@ -207,7 +247,9 @@ document.getElementById("resultado").innerHTML =
 function copiar(){
 
 const texto = document.getElementById("resultado").innerText;
+
 navigator.clipboard.writeText(texto);
+
 alert("Resultado copiado!");
 
 }
@@ -215,13 +257,17 @@ alert("Resultado copiado!");
 function whatsapp(){
 
 const texto = document.getElementById("resultado").innerText;
+
 const url = "https://wa.me/?text=" + encodeURIComponent(texto);
+
 window.open(url);
 
 }
 
 function limpar(){
+
 document.getElementById("resultado").innerHTML="";
+
 }
 
 function voltar(){
@@ -235,6 +281,8 @@ window.location.href="app.html";
 }
 
 }
+
+mostrarRestantes();
 
 </script>
 
