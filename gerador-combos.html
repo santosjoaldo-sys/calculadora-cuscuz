@@ -112,10 +112,10 @@ if(params.get("aluno") === "1"){
 return true;
 }
 
-let usos = localStorage.getItem("usos_app");
+let usos = localStorage.getItem("usos_combos");
 
 if(usos === null){
-localStorage.setItem("usos_app",0);
+localStorage.setItem("usos_combos",0);
 usos = 0;
 }
 
@@ -150,12 +150,12 @@ if(params.get("aluno") === "1"){
 return;
 }
 
-let usos = localStorage.getItem("usos_app");
+let usos = localStorage.getItem("usos_combos");
 
 usos = parseInt(usos);
 usos++;
 
-localStorage.setItem("usos_app",usos);
+localStorage.setItem("usos_combos",usos);
 
 }
 
@@ -165,9 +165,16 @@ if(!verificarUso()){
 return;
 }
 
+const tipo = document.getElementById("tipo").value.trim();
+
+if(!tipo){
+alert("Digite o tipo de comida.");
+return;
+}
+
 registrarUso();
 
-const tipo = document.getElementById("tipo").value;
+try{
 
 const res = await fetch("/api/combos",{
 method:"POST",
@@ -187,6 +194,13 @@ html+=`<div class="card">${linha}</div>`;
 });
 
 document.getElementById("resultado").innerHTML = html;
+
+}catch(e){
+
+document.getElementById("resultado").innerHTML =
+"<div class='card'>Erro ao gerar combos. Tente novamente.</div>";
+
+}
 
 }
 
