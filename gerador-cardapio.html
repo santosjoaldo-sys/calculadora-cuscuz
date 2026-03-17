@@ -14,8 +14,9 @@ font-family:Arial;
 background:#fff5e6;
 display:flex;
 justify-content:center;
-align-items:center;
-height:100vh;
+align-items:flex-start;
+min-height:100vh;
+padding:40px 0;
 margin:0;
 }
 
@@ -46,16 +47,24 @@ color:white;
 border:none;
 border-radius:6px;
 cursor:pointer;
+font-size:16px;
 }
 
 .result{
 margin-top:20px;
 text-align:left;
+background:#fafafa;
+padding:15px;
+border-radius:8px;
+max-height:300px;
+overflow:auto;
+white-space:pre-line;
 }
 
 .checkout{
 margin-top:20px;
 background:#ff7a00;
+font-weight:bold;
 }
 
 </style>
@@ -102,16 +111,11 @@ localStorage.setItem("testes", testes)
 
 if(testes > 3){
 
-document.getElementById("resultado").innerHTML = `
-<h3>🚫 Testes gratuitos finalizados</h3>
-<p>Você já utilizou os 3 testes gratuitos.</p>
-`
+document.getElementById("resultado").innerHTML =
+"🚫 Testes gratuitos finalizados\n\nVocê já utilizou os 3 testes gratuitos."
 
-document.getElementById("checkout").innerHTML = `
-<button class="checkout" onclick="checkout()">
-🔥 QUERO DESBLOQUEAR O CURSO
-</button>
-`
+document.getElementById("checkout").innerHTML =
+'<button class="checkout" onclick="checkout()">🔥 QUERO DESBLOQUEAR O CURSO</button>'
 
 return
 }
@@ -138,9 +142,11 @@ document.getElementById("contador").innerText =
 }
 
 function copiar(){
+
 navigator.clipboard.writeText(
 document.getElementById("resultado").innerText
 )
+
 }
 
 function whatsapp(){
@@ -149,13 +155,13 @@ let texto = encodeURIComponent(
 document.getElementById("resultado").innerText
 )
 
-window.open("https://wa.me/?text=" + texto)
+window.open("https://wa.me/?text="+texto)
 
 }
 
 function limpar(){
 
-document.getElementById("resultado").innerText = ""
+document.getElementById("resultado").innerText=""
 
 }
 
