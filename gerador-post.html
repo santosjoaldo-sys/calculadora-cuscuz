@@ -63,7 +63,7 @@ text-align:left;
 
 #loader{
 display:none;
-margin-top:20px;
+margin-top:15px;
 animation:pulse 1.5s infinite;
 }
 
@@ -113,7 +113,7 @@ animation:pulsar 1.2s infinite;
 
 let testes=localStorage.getItem("testes")||0
 
-function barra(){
+function atualizarBarra(){
 
 let restante=3-testes
 
@@ -126,14 +126,13 @@ document.getElementById("barra").innerText=b
 
 }
 
-barra()
+atualizarBarra()
 
 async function gerar(){
 
 testes++
 localStorage.setItem("testes",testes)
-
-barra()
+atualizarBarra()
 
 if(testes>3){
 
@@ -148,7 +147,7 @@ return
 
 document.getElementById("loader").style.display="block"
 
-await new Promise(r=>setTimeout(r,1200))
+await new Promise(resolve=>setTimeout(resolve,1200))
 
 const tipo=document.getElementById("tipo").value
 const promo=document.getElementById("promo").value
@@ -185,7 +184,7 @@ window.location.href="app.html"
 }
 
 function checkout(){
-window.open("https://pay.hotmart.com/K92944551N")
+window.open("https://pay.hotmart.com/K92944551N?off=m4vo1hl6&checkoutMode=10","_blank")
 }
 
 </script>
