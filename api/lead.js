@@ -8,7 +8,7 @@ try{
 
 const { nome, whatsapp, cidade, estado } = req.body;
 
-const response = await fetch("https://script.google.com/macros/s/AKfycbxVm9132v8kpMJG3dcqwhbfWp4M8RLJj0vx4wKVvxJiqmFqOSehhUcHCiY4zB46n2wrEA/exec",{
+const response = await fetch("https://script.google.com/macros/s/AKfycbxQMYUc1pufysJu3etDHjmvdziyMSo_EgyhSTxtOfROEDHTlm9rLgh3UwoVetk5HpR6ZA/exec",{
 
 method:"POST",
 
