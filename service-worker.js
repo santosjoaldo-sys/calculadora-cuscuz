@@ -1,8 +1,10 @@
-const CACHE_NAME = "comida-lucrativa-v1";
+const CACHE_NAME = "comida-lucrativa-v2";
 
 const urlsToCache = [
 "/",
 "/index.html",
+"/acesso.html",
+"/app.html",
 "/gerador-cardapio.html",
 "/gerador-nomes.html",
 "/gerador-combos.html",
@@ -11,13 +13,36 @@ const urlsToCache = [
 "/icon-512.png"
 ];
 
-self.addEventListener("install", function(event) {
+self.addEventListener("install", event => {
 
 event.waitUntil(
 
-caches.open(CACHE_NAME).then(function(cache) {
-
+caches.open(CACHE_NAME)
+.then(cache => {
 return cache.addAll(urlsToCache);
+})
+
+);
+
+});
+
+self.addEventListener("activate", event => {
+
+event.waitUntil(
+
+caches.keys().then(cacheNames => {
+
+return Promise.all(
+
+cacheNames.map(cache => {
+
+if (cache !== CACHE_NAME) {
+return caches.delete(cache);
+}
+
+})
+
+);
 
 })
 
@@ -25,13 +50,18 @@ return cache.addAll(urlsToCache);
 
 });
 
-self.addEventListener("fetch", function(event) {
+self.addEventListener("fetch", event => {
 
 event.respondWith(
 
-caches.match(event.request).then(function(response) {
+caches.match(event.request)
+.then(response => {
 
-return response || fetch(event.request);
+if(response){
+return response;
+}
+
+return fetch(event.request);
 
 })
 
