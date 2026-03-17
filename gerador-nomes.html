@@ -67,22 +67,15 @@ letter-spacing:5px;
 margin-top:10px;
 }
 
-#loader{
-display:none;
-margin-top:15px;
-font-weight:bold;
-animation:pulse 1.5s infinite;
-}
-
 .checkout{
 background:#ff7a00;
 animation:pulsar 1.2s infinite;
 }
 
-@keyframes pulse{
-0%{opacity:0.3}
-50%{opacity:1}
-100%{opacity:0.3}
+@keyframes pulsar{
+0%{transform:scale(1)}
+50%{transform:scale(1.05)}
+100%{transform:scale(1)}
 }
 
 </style>
@@ -93,16 +86,14 @@ animation:pulsar 1.2s infinite;
 
 <div class="container">
 
-<h2>🔥 Gerador de Nomes</h2>
+<h2>🔥 Gerador de Nomes Lucrativos</h2>
 
-<div>Testes gratuitos restantes</div>
+<div>Testes restantes</div>
 <div id="barra" class="barra"></div>
 
-<input id="tipo" placeholder="Tipo de comida">
+<input id="tipo" placeholder="Digite o tipo de comida">
 
 <button onclick="gerar()">Gerar Nomes</button>
-
-<div id="loader">🤖 Criando nomes...</div>
 
 <div class="result" id="resultado"></div>
 
@@ -150,17 +141,12 @@ barra()
 
 if(testes>3 && aluno!=="1"){
 
-document.getElementById("resultado").innerHTML="🚫 Testes finalizados."
+resultado.innerHTML="🚫 Testes gratuitos finalizados."
 
-document.getElementById("checkout").innerHTML=
-'<button class="checkout" onclick="checkout()">🔥 DESBLOQUEAR</button>'
+checkout.innerHTML='<button class="checkout" onclick="checkout()">🔥 DESBLOQUEAR TODAS AS FERRAMENTAS</button>'
 
 return
 }
-
-document.getElementById("loader").style.display="block"
-
-await new Promise(r=>setTimeout(r,1200))
 
 const tipo=document.getElementById("tipo").value
 
@@ -172,9 +158,21 @@ body:JSON.stringify({tipo})
 
 const data=await res.json()
 
-document.getElementById("loader").style.display="none"
+resultado.innerText=data.resultado
 
-document.getElementById("resultado").innerText=data.resultado
+if(testes===3 && aluno!=="1"){
+
+checkout.innerHTML=`<div style="margin-top:20px">
+
+⚠️ Este foi seu último teste gratuito.
+
+<button class="checkout" onclick="checkout()">
+🔥 DESBLOQUEAR TODAS AS FERRAMENTAS
+</button>
+
+</div>`
+
+}
 
 }
 
