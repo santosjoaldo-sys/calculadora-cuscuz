@@ -16,14 +16,16 @@ background:#fff5e6;
 display:flex;
 justify-content:center;
 align-items:center;
-height:100vh;
+min-height:100vh;
 margin:0;
+padding:20px;
 }
 
 .container{
 background:white;
 padding:40px;
-width:420px;
+width:100%;
+max-width:420px;
 border-radius:12px;
 box-shadow:0 10px 25px rgba(0,0,0,0.1);
 text-align:center;
@@ -31,6 +33,7 @@ text-align:center;
 
 h1{
 color:#ff7a00;
+margin-bottom:10px;
 }
 
 p{
@@ -46,16 +49,31 @@ border:none;
 border-radius:8px;
 font-size:16px;
 cursor:pointer;
+color:white;
 }
 
 .calc{
 background:#ff7a00;
-color:white;
 }
 
 .cardapio{
 background:#6a5acd;
-color:white;
+}
+
+.nomes{
+background:#ff4d4d;
+}
+
+.combos{
+background:#3498db;
+}
+
+.post{
+background:#2ecc71;
+}
+
+button:hover{
+opacity:0.9;
 }
 
 </style>
@@ -75,17 +93,33 @@ color:white;
 </button>
 
 <button class="cardapio" onclick="abrirCardapio()">
-🍲 Gerador de Cardápio Lucrativo
+🍲 Gerador de Cardápio
+</button>
+
+<button class="nomes" onclick="abrirNomes()">
+🔥 Gerador de Nomes de Pratos
+</button>
+
+<button class="combos" onclick="abrirCombos()">
+📦 Gerador de Combos
+</button>
+
+<button class="post" onclick="abrirPost()">
+📣 Gerador de Post para Instagram
 </button>
 
 </div>
 
 <script>
 
+function getAluno(){
 const params = new URLSearchParams(window.location.search);
-const aluno = params.get("aluno");
+return params.get("aluno");
+}
 
 function abrirCalculadora(){
+
+const aluno = getAluno();
 
 if(aluno === "1"){
 window.location.href="santosjoaldo-sys/calculadora-cuscuz?aluno=1";
@@ -97,10 +131,48 @@ window.location.href="santosjoaldo-sys/calculadora-cuscuz";
 
 function abrirCardapio(){
 
+const aluno = getAluno();
+
 if(aluno === "1"){
 window.location.href="gerador-cardapio.html?aluno=1";
 }else{
 window.location.href="gerador-cardapio.html";
+}
+
+}
+
+function abrirNomes(){
+
+const aluno = getAluno();
+
+if(aluno === "1"){
+window.location.href="gerador-nomes.html?aluno=1";
+}else{
+window.location.href="gerador-nomes.html";
+}
+
+}
+
+function abrirCombos(){
+
+const aluno = getAluno();
+
+if(aluno === "1"){
+window.location.href="gerador-combos.html?aluno=1";
+}else{
+window.location.href="gerador-combos.html";
+}
+
+}
+
+function abrirPost(){
+
+const aluno = getAluno();
+
+if(aluno === "1"){
+window.location.href="gerador-post.html?aluno=1";
+}else{
+window.location.href="gerador-post.html";
 }
 
 }
