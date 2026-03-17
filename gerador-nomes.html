@@ -1,53 +1,45 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-
 <head>
 
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Gerador de Nomes de Pratos</title>
+<title>Gerador de Nomes</title>
 
 <style>
 
 body{
 font-family:Arial;
-background:#f5e9d8;
+background:#fff5e6;
 display:flex;
 justify-content:center;
 align-items:center;
-min-height:100vh;
+height:100vh;
 margin:0;
-padding:20px;
 }
 
 .container{
 background:white;
-padding:30px;
-width:100%;
-max-width:420px;
+padding:25px;
+width:90%;
+max-width:450px;
 border-radius:12px;
 box-shadow:0 10px 20px rgba(0,0,0,0.1);
-}
-
-h2{
 text-align:center;
-margin-bottom:20px;
 }
 
 input{
 width:100%;
 padding:10px;
 margin-top:10px;
-border:1px solid #ddd;
-border-radius:6px;
 }
 
 button{
 width:100%;
 padding:12px;
-margin-top:12px;
-background:#ff4d4d;
+margin-top:10px;
+background:#ff7a00;
 color:white;
 border:none;
 border-radius:6px;
@@ -56,23 +48,8 @@ cursor:pointer;
 
 .result{
 margin-top:20px;
-}
-
-.card{
-background:#f7f7f7;
-padding:12px;
-margin-bottom:10px;
-border-radius:8px;
-box-shadow:0 3px 8px rgba(0,0,0,0.1);
-}
-
-.actions button{
-background:#6a5acd;
-margin-top:8px;
-}
-
-.voltar{
-background:#888;
+text-align:left;
+white-space:pre-line;
 }
 
 </style>
@@ -85,51 +62,31 @@ background:#888;
 
 <h2>🔥 Gerador de Nomes de Pratos</h2>
 
-<input id="tipo" placeholder="Digite o tipo de comida">
+<input id="produto" placeholder="Ex: Cuscuz Gourmet">
 
 <button onclick="gerar()">Gerar Nomes</button>
 
 <div class="result" id="resultado"></div>
 
-<div class="actions">
-
-<button onclick="copiar()">📋 Copiar</button>
-
-<button onclick="whatsapp()">📲 Enviar WhatsApp</button>
-
-<button onclick="limpar()">🗑 Limpar</button>
-
-<button class="voltar" onclick="voltar()">⬅ Voltar</button>
-
-</div>
-
 </div>
 
 <script>
 
-const LIMITE_USOS = 3;
+const LIMITE_USOS = 3
 
 function verificarUso(){
 
-const params = new URLSearchParams(window.location.search);
+const params = new URLSearchParams(window.location.search)
 
 if(params.get("aluno") === "1"){
-return true;
+return true
 }
 
-let usos = localStorage.getItem("usos_nomes");
-
-if(usos === null){
-localStorage.setItem("usos_nomes",0);
-usos = 0;
-}
-
-usos = parseInt(usos);
+let usos = parseInt(localStorage.getItem("usos_app") || "0")
 
 if(usos >= LIMITE_USOS){
 
 document.getElementById("resultado").innerHTML = `
-<div class="card">
 
 <h3>🚫 Testes gratuitos finalizados</h3>
 
@@ -142,120 +99,61 @@ style="background:#ff7a00;color:white;padding:12px;border-radius:6px;text-decora
 
 </a>
 
-</div>
-`;
+`
 
-return false;
+return false
 
 }
 
-return true;
+return true
 
 }
 
 function registrarUso(){
 
-const params = new URLSearchParams(window.location.search);
+const params = new URLSearchParams(window.location.search)
 
 if(params.get("aluno") === "1"){
-return;
+return
 }
 
-let usos = localStorage.getItem("usos_nomes");
+let usos = parseInt(localStorage.getItem("usos_app") || "0")
 
-usos = parseInt(usos);
+usos++
 
-usos++;
-
-localStorage.setItem("usos_nomes",usos);
+localStorage.setItem("usos_app", usos)
 
 }
 
 async function gerar(){
 
 if(!verificarUso()){
-return;
+return
 }
 
-const tipo = document.getElementById("tipo").value.trim();
+const produto=document.getElementById("produto").value
 
-if(!tipo){
-alert("Digite o tipo de comida.");
-return;
+if(!produto){
+
+document.getElementById("resultado").innerText="Digite o tipo de comida"
+
+return
+
 }
 
-registrarUso();
-
-try{
-
-const res = await fetch("/api/nomes",{
+const res=await fetch("/api/nomes",{
 method:"POST",
 headers:{
 "Content-Type":"application/json"
 },
-body:JSON.stringify({tipo})
-});
+body:JSON.stringify({produto})
+})
 
-const data = await res.json();
+const data=await res.json()
 
-const linhas = data.resultado.split("\n");
+document.getElementById("resultado").innerText=data.resultado
 
-let html = "";
-
-linhas.forEach(linha => {
-
-if(linha.trim()==="") return;
-
-html += `<div class="card">${linha}</div>`;
-
-});
-
-document.getElementById("resultado").innerHTML = html;
-
-}catch(e){
-
-document.getElementById("resultado").innerHTML =
-"<div class='card'>Erro ao gerar nomes. Tente novamente.</div>";
-
-}
-
-}
-
-function copiar(){
-
-const texto = document.getElementById("resultado").innerText;
-
-navigator.clipboard.writeText(texto);
-
-alert("Resultado copiado!");
-
-}
-
-function whatsapp(){
-
-const texto = document.getElementById("resultado").innerText;
-
-const url = "https://wa.me/?text=" + encodeURIComponent(texto);
-
-window.open(url);
-
-}
-
-function limpar(){
-
-document.getElementById("resultado").innerHTML="";
-
-}
-
-function voltar(){
-
-const params = new URLSearchParams(window.location.search);
-
-if(params.get("aluno") === "1"){
-window.location.href="app.html?aluno=1";
-}else{
-window.location.href="app.html";
-}
+registrarUso()
 
 }
 
