@@ -6,7 +6,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Gerador de Post para Instagram</title>
+<title>Gerador de Post</title>
 
 <style>
 
@@ -30,11 +30,6 @@ border-radius:12px;
 box-shadow:0 10px 20px rgba(0,0,0,0.1);
 }
 
-h2{
-text-align:center;
-margin-bottom:20px;
-}
-
 input{
 width:100%;
 padding:10px;
@@ -47,57 +42,18 @@ button{
 width:100%;
 padding:12px;
 margin-top:12px;
-background:#ff7a00;
+background:#2ecc71;
 color:white;
 border:none;
 border-radius:6px;
 cursor:pointer;
-font-size:15px;
-}
-
-.result{
-margin-top:20px;
 }
 
 .card{
-
 background:#f7f7f7;
-
 padding:12px;
-
-margin-bottom:10px;
-
+margin-top:10px;
 border-radius:8px;
-
-box-shadow:0 3px 8px rgba(0,0,0,0.1);
-
-font-size:15px;
-
-}
-
-.voltar{
-position:fixed;
-top:20px;
-left:20px;
-background:#ff7a00;
-color:white;
-border:none;
-padding:10px 15px;
-border-radius:6px;
-cursor:pointer;
-width:auto;
-}
-
-.copiar{
-background:#6a5acd;
-}
-
-.whatsapp{
-background:#25D366;
-}
-
-.limpar{
-background:#888;
 }
 
 </style>
@@ -105,8 +61,6 @@ background:#888;
 </head>
 
 <body>
-
-<button class="voltar" onclick="voltarMenu()">⬅ Voltar ao Menu</button>
 
 <div class="container">
 
@@ -116,28 +70,93 @@ background:#888;
 
 <button onclick="gerar()">Gerar Post</button>
 
-<div class="result" id="resultado"></div>
-
-<button class="copiar" onclick="copiarResultado()">📋 Copiar Resultado</button>
-
-<button class="whatsapp" onclick="enviarWhatsapp()">📲 Enviar para WhatsApp</button>
-
-<button class="limpar" onclick="limparResultado()">🗑 Limpar</button>
+<div id="resultado"></div>
 
 </div>
 
 <script>
 
+const LIMITE_USOS = 3;
+
+function verificarUso(){
+
+const params = new URLSearchParams(window.location.search);
+
+if(params.get("aluno") === "1"){
+return true;
+}
+
+let usos = localStorage.getItem("usos_app");
+
+if(usos === null){
+localStorage.setItem("usos_app",0);
+usos = 0;
+}
+
+usos = parseInt(usos);
+
+if(usos >= LIMITE_USOS){
+
+document.getElementById("resultado").innerHTML = `
+<div class="card">
+
+<h3>🚫 Testes gratuitos finalizados</h3>
+
+<a href="https://pay.hotmart.com/K92944551N?off=m4vo1hl6&checkoutMode=10" style="background:#ff7a00;color:white;padding:12px;border-radius:6px;text-decoration:none">
+
+🔥 QUERO COMPRAR O CURSO
+
+</a>
+
+</div>
+`;
+
+return false;
+
+}
+
+return true;
+
+}
+
+function registrarUso(){
+
+const params = new URLSearchParams(window.location.search);
+
+if(params.get("aluno") === "1"){
+return;
+}
+
+let usos = localStorage.getItem("usos_app");
+
+usos = parseInt(usos);
+
+usos++;
+
+localStorage.setItem("usos_app",usos);
+
+}
+
 async function gerar(){
+
+if(!verificarUso()){
+return;
+}
+
+registrarUso();
 
 const produto = document.getElementById("produto").value;
 
 const res = await fetch("/api/post",{
+
 method:"POST",
+
 headers:{
 "Content-Type":"application/json"
 },
+
 body:JSON.stringify({produto})
+
 });
 
 const data = await res.json();
@@ -155,36 +174,6 @@ html += `<div class="card">📣 ${linha}</div>`;
 });
 
 document.getElementById("resultado").innerHTML = html;
-
-}
-
-function voltarMenu(){
-window.location.href = "index.html";
-}
-
-function copiarResultado(){
-
-const texto = document.getElementById("resultado").innerText;
-
-navigator.clipboard.writeText(texto);
-
-alert("Resultado copiado!");
-
-}
-
-function enviarWhatsapp(){
-
-const texto = document.getElementById("resultado").innerText;
-
-const url = "https://wa.me/?text=" + encodeURIComponent(texto);
-
-window.open(url);
-
-}
-
-function limparResultado(){
-
-document.getElementById("resultado").innerHTML = "";
 
 }
 
