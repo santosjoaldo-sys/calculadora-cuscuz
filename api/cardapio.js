@@ -1,18 +1,31 @@
 export default async function handler(req, res) {
+
   try {
-    
+
     // permitir teste direto no navegador
     if (req.method !== "POST") {
       return res.status(200).json({
         resultado: "API funcionando 🚀"
       });
     }
-    
-    const { tipo, meta, custo } = req.body || {};
+
+    let { tipo, meta, custo } = req.body || {};
 
     if (!tipo || !meta || !custo) {
       return res.status(400).json({
         resultado: "Dados incompletos enviados."
+      });
+    }
+
+    // sanitização simples
+    tipo = String(tipo).trim();
+
+    meta = Number(meta);
+    custo = Number(custo);
+
+    if (isNaN(meta) || isNaN(custo)) {
+      return res.status(400).json({
+        resultado: "Meta e custo devem ser números."
       });
     }
 
@@ -27,6 +40,7 @@ Custo por unidade: R$${custo}
 REGRAS:
 - Linguagem simples
 - Exatamente 5 pratos
+- Preço deve gerar lucro
 - Sem textos longos
 
 FORMATO:
@@ -48,27 +62,35 @@ Calcule quantas unidades precisam ser vendidas para atingir aproximadamente R$${
 `;
 
     const response = await fetch("https://api.openai.com/v1/chat/completions", {
+
       method: "POST",
+
       headers: {
         "Content-Type": "application/json",
         "Authorization": `Bearer ${process.env.OPENAI_API_KEY}`
       },
+
       body: JSON.stringify({
         model: "gpt-4o-mini",
         temperature: 0.6,
+        max_tokens: 400,
         messages: [
           { role: "user", content: prompt }
         ]
       })
+
     });
 
     const data = await response.json();
 
     if (!response.ok) {
+
       console.error("Erro OpenAI:", data);
+
       return res.status(500).json({
         resultado: "Erro da OpenAI ao gerar cardápio."
       });
+
     }
 
     const texto = data?.choices?.[0]?.message?.content;
@@ -86,4 +108,5 @@ Calcule quantas unidades precisam ser vendidas para atingir aproximadamente R$${
     });
 
   }
+
 }
