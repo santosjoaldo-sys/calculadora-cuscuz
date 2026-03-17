@@ -117,10 +117,10 @@ if(params.get("aluno") === "1"){
 return true;
 }
 
-let usos = localStorage.getItem("usos_app");
+let usos = localStorage.getItem("usos_nomes");
 
 if(usos === null){
-localStorage.setItem("usos_app",0);
+localStorage.setItem("usos_nomes",0);
 usos = 0;
 }
 
@@ -161,13 +161,13 @@ if(params.get("aluno") === "1"){
 return;
 }
 
-let usos = localStorage.getItem("usos_app");
+let usos = localStorage.getItem("usos_nomes");
 
 usos = parseInt(usos);
 
 usos++;
 
-localStorage.setItem("usos_app",usos);
+localStorage.setItem("usos_nomes",usos);
 
 }
 
@@ -177,9 +177,14 @@ if(!verificarUso()){
 return;
 }
 
-registrarUso();
+const tipo = document.getElementById("tipo").value.trim();
 
-const tipo = document.getElementById("tipo").value;
+if(!tipo){
+alert("Digite o tipo de comida.");
+return;
+}
+
+registrarUso();
 
 try{
 
