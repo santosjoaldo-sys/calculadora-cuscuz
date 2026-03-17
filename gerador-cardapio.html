@@ -121,10 +121,10 @@ if(params.get("aluno") === "1"){
 return true;
 }
 
-let usos = localStorage.getItem("usos_app");
+let usos = localStorage.getItem("usos_cardapio");
 
 if(usos === null){
-localStorage.setItem("usos_app",0);
+localStorage.setItem("usos_cardapio",0);
 usos = 0;
 }
 
@@ -165,13 +165,13 @@ if(params.get("aluno") === "1"){
 return;
 }
 
-let usos = localStorage.getItem("usos_app");
+let usos = localStorage.getItem("usos_cardapio");
 
 usos = parseInt(usos);
 
 usos++;
 
-localStorage.setItem("usos_app",usos);
+localStorage.setItem("usos_cardapio",usos);
 
 }
 
@@ -181,11 +181,26 @@ if(!verificarUso()){
 return;
 }
 
-registrarUso();
+const tipo = document.getElementById("tipo").value.trim();
+const meta = document.getElementById("meta").value.trim();
+const custo = document.getElementById("custo").value.trim();
 
-const tipo = document.getElementById("tipo").value;
-const meta = document.getElementById("meta").value;
-const custo = document.getElementById("custo").value;
+if(!tipo){
+alert("Digite o tipo de comida.");
+return;
+}
+
+if(!meta){
+alert("Informe a meta diária.");
+return;
+}
+
+if(!custo){
+alert("Informe o custo por unidade.");
+return;
+}
+
+registrarUso();
 
 try{
 
@@ -263,4 +278,5 @@ window.location.href="app.html";
 </script>
 
 </body>
+
 </html>
