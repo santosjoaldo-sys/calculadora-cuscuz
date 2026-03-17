@@ -57,21 +57,10 @@ cursor:pointer;
 color:white;
 }
 
-.cardapio{
-background:#ff7a00;
-}
-
-.nomes{
-background:#ff4d4d;
-}
-
-.combos{
-background:#6a5acd;
-}
-
-.post{
-background:#2ecc71;
-}
+.cardapio{background:#ff7a00;}
+.nomes{background:#ff4d4d;}
+.combos{background:#6a5acd;}
+.post{background:#2ecc71;}
 
 .botao:hover{
 opacity:0.9;
@@ -123,30 +112,16 @@ Powered by Comida Lucrativa AI
 
 <script>
 
+const params = new URLSearchParams(window.location.search);
+const aluno = params.get("aluno");
+
 function abrir(pagina){
+
+if(aluno === "1"){
+window.location.href = pagina + "?aluno=1";
+}else{
 window.location.href = pagina;
 }
-
-</script>
-
-<script>
-
-if ('serviceWorker' in navigator) {
-
-window.addEventListener('load', function(){
-
-navigator.serviceWorker.register('./service-worker.js')
-.then(function(reg){
-
-console.log('Service Worker registrado:', reg.scope);
-
-}).catch(function(error){
-
-console.log('Erro ao registrar Service Worker:', error);
-
-});
-
-});
 
 }
 
