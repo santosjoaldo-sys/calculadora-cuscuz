@@ -112,7 +112,7 @@ animation:pulsar 1.2s infinite;
 const params=new URLSearchParams(window.location.search);
 const aluno=params.get("aluno");
 
-let testes=parseInt(localStorage.getItem("testes_post"))||0;
+let testes=parseInt(localStorage.getItem("testes_total"))||0;
 
 if(aluno==="1"){testes=0;}
 
@@ -144,7 +144,7 @@ return
 
 if(aluno!=="1"){
 testes++
-localStorage.setItem("testes_post",testes)
+localStorage.setItem("testes_total",testes)
 }
 
 barra()
