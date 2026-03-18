@@ -108,26 +108,25 @@ animation:pulsar 1.2s infinite;
 
 <script>
 
-const params=new URLSearchParams(window.location.search);
-const aluno=params.get("aluno");
+const params = new URLSearchParams(window.location.search)
+const aluno = params.get("aluno")
 
-let testes=parseInt(localStorage.getItem("testes_total"))||0;
+let testes = parseInt(localStorage.getItem("testes_total")) || 0
 
-if(aluno==="1"){testes=0;}
-
-const resultado=document.getElementById("resultado")
-const checkout=document.getElementById("checkout")
+if(aluno === "1"){
+testes = 0
+}
 
 function barra(){
 
-let restante=aluno==="1"?3:Math.max(0,3-testes)
+let restante = aluno === "1" ? 3 : Math.max(0, 3 - testes)
 
-let b=""
+let b = ""
 
 for(let i=0;i<restante;i++){b+="🟩"}
 for(let i=restante;i<3;i++){b+="⬜"}
 
-document.getElementById("barra").innerText=b
+document.getElementById("barra").innerText = b
 
 }
 
@@ -135,70 +134,78 @@ barra()
 
 function calcular(){
 
-if(aluno!=="1" && testes>=3){
+if(aluno !== "1" && testes >= 3){
 
-resultado.innerHTML="🚫 Testes gratuitos finalizados."
+document.getElementById("resultado").innerText="🚫 Testes gratuitos finalizados."
 
-checkout.innerHTML='<button class="checkout" onclick="checkout()">🔥 DESBLOQUEAR TODAS AS FERRAMENTAS</button>'
+document.getElementById("checkout").innerHTML=
+'<button class="checkout" onclick="checkout()">🔥 DESBLOQUEAR TODAS AS FERRAMENTAS</button>'
 
 return
 
 }
 
-const custo=parseFloat(document.getElementById("custo").value)||0
-const preco=parseFloat(document.getElementById("preco").value)||0
-const quantidade=parseInt(document.getElementById("quantidade").value)||0
+const custo=parseFloat(document.getElementById("custo").value) || 0
+const preco=parseFloat(document.getElementById("preco").value) || 0
+const quantidade=parseInt(document.getElementById("quantidade").value) || 0
 
 const lucroUnitario=preco-custo
 const lucroTotal=lucroUnitario*quantidade
 
-resultado.innerText=
-`Lucro por unidade: R$ ${lucroUnitario.toFixed(2)}
+document.getElementById("resultado").innerText =
+"Lucro por unidade: R$ " + lucroUnitario.toFixed(2) +
+"\n\nLucro total: R$ " + lucroTotal.toFixed(2)
 
-Lucro total: R$ ${lucroTotal.toFixed(2)}`
-
-if(aluno!=="1"){
+if(aluno !== "1"){
 testes++
 localStorage.setItem("testes_total",testes)
 }
 
 barra()
 
-if(testes===3 && aluno!=="1"){
+if(testes === 3 && aluno !== "1"){
 
-checkout.innerHTML=`<div style="margin-top:20px">
-
-⚠️ Este foi seu último teste gratuito.
-
-<button class="checkout" onclick="checkout()">
-🔥 DESBLOQUEAR TODAS AS FERRAMENTAS
-</button>
-
-</div>`
+document.getElementById("checkout").innerHTML =
+'<div style="margin-top:20px">⚠️ Este foi seu último teste gratuito.<br><br><button class="checkout" onclick="checkout()">🔥 DESBLOQUEAR TODAS AS FERRAMENTAS</button></div>'
 
 }
 
 }
 
 function copiar(){
-navigator.clipboard.writeText(resultado.innerText)
+
+const texto=document.getElementById("resultado").innerText
+navigator.clipboard.writeText(texto)
+
 }
 
 function whatsapp(){
-let t=encodeURIComponent(resultado.innerText)
-window.open("https://wa.me/?text="+t)
+
+const texto=encodeURIComponent(document.getElementById("resultado").innerText)
+window.open("https://wa.me/?text="+texto)
+
 }
 
 function limpar(){
-resultado.innerText=""
+
+document.getElementById("resultado").innerText=""
+
 }
 
 function voltar(){
-window.location.href="app.html"+(aluno==="1"?"?aluno=1":"")
+
+if(aluno==="1"){
+window.location.href="app.html?aluno=1"
+}else{
+window.location.href="app.html"
+}
+
 }
 
 function checkout(){
+
 window.open("https://pay.hotmart.com/K92944551N?off=m4vo1hl6&checkoutMode=10","_blank")
+
 }
 
 </script>
