@@ -72,6 +72,12 @@ background:#ff7a00;
 animation:pulsar 1.2s infinite;
 }
 
+@keyframes pulsar{
+0%{transform:scale(1)}
+50%{transform:scale(1.05)}
+100%{transform:scale(1)}
+}
+
 </style>
 
 </head>
@@ -106,13 +112,13 @@ animation:pulsar 1.2s infinite;
 const params=new URLSearchParams(window.location.search);
 const aluno=params.get("aluno");
 
-let testes=localStorage.getItem("testes")||0;
+let testes=parseInt(localStorage.getItem("testes_post"))||0;
 
 if(aluno==="1"){testes=0;}
 
 function barra(){
 
-let restante=aluno==="1"?3:3-testes
+let restante=aluno==="1"?3:Math.max(0,3-testes)
 
 let b=""
 
@@ -127,21 +133,21 @@ barra()
 
 async function gerar(){
 
-if(aluno!=="1"){
-testes++
-localStorage.setItem("testes",testes)
-}
-
-barra()
-
-if(testes>3 && aluno!=="1"){
+if(aluno!=="1" && testes>=3){
 
 resultado.innerHTML="🚫 Testes gratuitos finalizados."
 
-checkout.innerHTML='<button class="checkout" onclick="checkout()">🔥 DESBLOQUEAR</button>'
+checkout.innerHTML='<button class="checkout" onclick="checkout()">🔥 DESBLOQUEAR TODAS AS FERRAMENTAS</button>'
 
 return
 }
+
+if(aluno!=="1"){
+testes++
+localStorage.setItem("testes_post",testes)
+}
+
+barra()
 
 const tipo=document.getElementById("tipo").value
 const promo=document.getElementById("promo").value
@@ -172,14 +178,18 @@ checkout.innerHTML=`<div style="margin-top:20px">
 
 }
 
-function copiar(){navigator.clipboard.writeText(resultado.innerText)}
+function copiar(){
+navigator.clipboard.writeText(resultado.innerText)
+}
 
 function whatsapp(){
 let t=encodeURIComponent(resultado.innerText)
 window.open("https://wa.me/?text="+t)
 }
 
-function limpar(){resultado.innerText=""}
+function limpar(){
+resultado.innerText=""
+}
 
 function voltar(){
 window.location.href="app.html"+(aluno==="1"?"?aluno=1":"")
