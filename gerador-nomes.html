@@ -86,12 +86,12 @@ animation:pulsar 1.2s infinite;
 
 <div class="container">
 
-<h2>🧠 Gerador de Nomes para Negócios de Comida</h2>
+<h2>🧠 Gerador de Nomes</h2>
 
 <div>Testes restantes</div>
 <div id="barra" class="barra"></div>
 
-<input id="tipo" placeholder="Tipo de comida (ex: cuscuz, hambúrguer)">
+<input id="tipo" placeholder="Tipo de comida (ex: cuscuz, hamburguer)">
 <input id="estilo" placeholder="Estilo do nome (ex: criativo, gourmet)">
 
 <button onclick="gerar()">Gerar Nomes</button>
@@ -109,15 +109,14 @@ animation:pulsar 1.2s infinite;
 
 <script>
 
-const params = new URLSearchParams(window.location.search);
-const aluno = params.get("aluno");
+const params = new URLSearchParams(window.location.search)
+const aluno = params.get("aluno")
 
-let testes = parseInt(localStorage.getItem("testes_total")) || 0;
+let testes = parseInt(localStorage.getItem("testes_total")) || 0
 
-if(aluno === "1"){testes = 0;}
-
-const resultado = document.getElementById("resultado")
-const checkout = document.getElementById("checkout")
+if(aluno === "1"){
+testes = 0
+}
 
 function barra(){
 
@@ -138,72 +137,94 @@ async function gerar(){
 
 if(aluno !== "1" && testes >= 3){
 
-resultado.innerHTML = "🚫 Testes gratuitos finalizados."
+document.getElementById("resultado").innerText="🚫 Testes gratuitos finalizados."
 
-checkout.innerHTML = '<button class="checkout" onclick="checkout()">🔥 DESBLOQUEAR TODAS AS FERRAMENTAS</button>'
+document.getElementById("checkout").innerHTML=
+'<button class="checkout" onclick="checkout()">🔥 DESBLOQUEAR TODAS AS FERRAMENTAS</button>'
 
 return
 
 }
 
-const tipo = document.getElementById("tipo").value
-const estilo = document.getElementById("estilo").value
+const tipo=document.getElementById("tipo").value
+const estilo=document.getElementById("estilo").value
 
-const res = await fetch("/api/nomes",{
+document.getElementById("resultado").innerText="Gerando..."
+
+try{
+
+const res=await fetch("/api/nomes",{
 method:"POST",
 headers:{"Content-Type":"application/json"},
 body:JSON.stringify({tipo,estilo})
 })
 
-const data = await res.json()
+const data=await res.json()
 
-resultado.innerText = data.resultado
+document.getElementById("resultado").innerText=data.resultado
+
+}catch(e){
+
+document.getElementById("resultado").innerText="Erro ao gerar resultado."
+
+}
 
 if(aluno !== "1"){
 testes++
-localStorage.setItem("testes_total", testes)
+localStorage.setItem("testes_total",testes)
 }
 
 barra()
 
 if(testes === 3 && aluno !== "1"){
 
-checkout.innerHTML = `<div style="margin-top:20px">
-
-⚠️ Este foi seu último teste gratuito.
-
-<button class="checkout" onclick="checkout()">
-🔥 DESBLOQUEAR TODAS AS FERRAMENTAS
-</button>
-
-</div>`
+document.getElementById("checkout").innerHTML=
+'<div style="margin-top:20px">⚠️ Este foi seu último teste gratuito.<br><br><button class="checkout" onclick="checkout()">🔥 DESBLOQUEAR TODAS AS FERRAMENTAS</button></div>'
 
 }
 
 }
 
 function copiar(){
-navigator.clipboard.writeText(resultado.innerText)
+
+const texto=document.getElementById("resultado").innerText
+
+navigator.clipboard.writeText(texto)
+
 }
 
 function whatsapp(){
-let t = encodeURIComponent(resultado.innerText)
-window.open("https://wa.me/?text="+t)
+
+const texto=encodeURIComponent(document.getElementById("resultado").innerText)
+
+window.open("https://wa.me/?text="+texto)
+
 }
 
 function limpar(){
-resultado.innerText = ""
+
+document.getElementById("resultado").innerText=""
+
 }
 
 function voltar(){
-window.location.href="app.html"+(aluno==="1"?"?aluno=1":"")
+
+if(aluno==="1"){
+window.location.href="app.html?aluno=1"
+}else{
+window.location.href="app.html"
+}
+
 }
 
 function checkout(){
+
 window.open("https://pay.hotmart.com/K92944551N?off=m4vo1hl6&checkoutMode=10","_blank")
+
 }
 
 </script>
 
 </body>
+
 </html>
