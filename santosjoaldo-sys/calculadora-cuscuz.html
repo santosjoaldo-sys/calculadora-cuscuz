@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
 
 <meta charset="UTF-8">
@@ -42,7 +43,7 @@ button{
 width:100%;
 padding:12px;
 margin-top:12px;
-background:#ff7a00;
+background:#2ecc71;
 color:white;
 border:none;
 border-radius:6px;
@@ -83,14 +84,14 @@ animation:pulsar 1.2s infinite;
 
 <div class="container">
 
-<h2>📊 Calculadora de Lucro</h2>
+<h2>💰 Calculadora de Lucro</h2>
 
 <div>Testes restantes</div>
 <div id="barra" class="barra"></div>
 
-<input id="custo" placeholder="Custo por unidade">
-<input id="preco" placeholder="Preço de venda">
-<input id="quantidade" placeholder="Quantidade vendida por dia">
+<input id="custo" placeholder="Custo do produto (R$)">
+<input id="preco" placeholder="Preço de venda (R$)">
+<input id="quantidade" placeholder="Quantidade vendida">
 
 <button onclick="calcular()">Calcular Lucro</button>
 
@@ -113,6 +114,9 @@ const aluno=params.get("aluno");
 let testes=parseInt(localStorage.getItem("testes_total"))||0;
 
 if(aluno==="1"){testes=0;}
+
+const resultado=document.getElementById("resultado")
+const checkout=document.getElementById("checkout")
 
 function barra(){
 
@@ -138,7 +142,20 @@ resultado.innerHTML="🚫 Testes gratuitos finalizados."
 checkout.innerHTML='<button class="checkout" onclick="checkout()">🔥 DESBLOQUEAR TODAS AS FERRAMENTAS</button>'
 
 return
+
 }
+
+const custo=parseFloat(document.getElementById("custo").value)||0
+const preco=parseFloat(document.getElementById("preco").value)||0
+const quantidade=parseInt(document.getElementById("quantidade").value)||0
+
+const lucroUnitario=preco-custo
+const lucroTotal=lucroUnitario*quantidade
+
+resultado.innerText=
+`Lucro por unidade: R$ ${lucroUnitario.toFixed(2)}
+
+Lucro total: R$ ${lucroTotal.toFixed(2)}`
 
 if(aluno!=="1"){
 testes++
@@ -146,19 +163,6 @@ localStorage.setItem("testes_total",testes)
 }
 
 barra()
-
-let custo=parseFloat(document.getElementById("custo").value)
-let preco=parseFloat(document.getElementById("preco").value)
-let qtd=parseFloat(document.getElementById("quantidade").value)
-
-let lucroUnit=preco-custo
-let lucroDia=lucroUnit*qtd
-let lucroMes=lucroDia*30
-
-resultado.innerText=
-"Lucro por unidade: R$ "+lucroUnit.toFixed(2)+"\n"+
-"Lucro por dia: R$ "+lucroDia.toFixed(2)+"\n"+
-"Lucro por mês: R$ "+lucroMes.toFixed(2)
 
 if(testes===3 && aluno!=="1"){
 
@@ -190,7 +194,7 @@ resultado.innerText=""
 }
 
 function voltar(){
-window.location.href="../app.html"+(aluno==="1"?"?aluno=1":"")
+window.location.href="app.html"+(aluno==="1"?"?aluno=1":"")
 }
 
 function checkout(){
