@@ -159,13 +159,16 @@ document.getElementById("resultado").innerText =
 "\n\nLucro total: R$ " + lucroTotal.toFixed(2)
 
 if(aluno !== "1"){
+
 testes++
+
 localStorage.setItem("testes_total",testes)
+
 }
 
 barra()
 
-if(testes === 3 && aluno !== "1"){
+if(aluno !== "1" && testes >= 3){
 
 document.getElementById("resultado").innerText +=
 "\n\n⚠️ Este foi seu último teste gratuito."
