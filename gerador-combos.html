@@ -147,35 +147,22 @@ return
 
 }
 
-const produto = document.getElementById("produto").value || "Cuscuz Gourmet"
+const produto = document.getElementById("produto").value || "Cuscuz"
 
-const combos =
-"🍽 COMBOS SUGERIDOS\n\n"+
-"🥇 Combo 1\n"+
-produto+" + Café\nPreço sugerido: R$ 8,00\n\n"+
-
-"🥈 Combo 2\n"+
-produto+" + Suco Natural\nPreço sugerido: R$ 10,00\n\n"+
-
-"🥉 Combo 3\n"+
-produto+" + Refrigerante\nPreço sugerido: R$ 12,00\n\n"+
-
-"⭐ Combo Família\n"+
-produto+" x3 + Refrigerante 1L\nPreço sugerido: R$ 28,00\n\n"+
-
-"🔥 Combo Premium\n"+
-produto+" Especial + Suco + Sobremesa\nPreço sugerido: R$ 18,00"
-
-document.getElementById("resultado").innerText = combos
+document.getElementById("resultado").innerText =
+"Resultado gerado para: " + produto
 
 if(aluno !== "1"){
+
 testes++
-localStorage.setItem("testes_combos",testes)
+localStorage.setItem("testes_nomes",testes) 
+// aqui mantém o nome da chave de cada arquivo
+
 }
 
 barra()
 
-if(testes === 3 && aluno !== "1"){
+if(aluno !== "1" && testes >= 3){
 
 document.getElementById("resultado").innerText +=
 "\n\n⚠️ Este foi seu último teste gratuito."
