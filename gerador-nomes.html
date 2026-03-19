@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="pt-br">
 
@@ -31,12 +32,13 @@ box-shadow:0 10px 20px rgba(0,0,0,0.1);
 text-align:center;
 }
 
-input{
+textarea{
 width:100%;
 padding:10px;
 margin-top:10px;
 border-radius:6px;
 border:1px solid #ddd;
+height:120px;
 }
 
 button{
@@ -55,8 +57,6 @@ margin-top:20px;
 background:#fafafa;
 padding:15px;
 border-radius:8px;
-max-height:300px;
-overflow:auto;
 white-space:pre-line;
 text-align:left;
 }
@@ -67,15 +67,17 @@ letter-spacing:5px;
 margin-top:10px;
 }
 
-.checkout{
-background:#ff7a00;
-animation:pulsar 1.2s infinite;
+.link-checkout{
+display:block;
+margin-top:20px;
+font-weight:bold;
+color:#ff7a00;
+text-decoration:none;
+font-size:18px;
 }
 
-@keyframes pulsar{
-0%{transform:scale(1)}
-50%{transform:scale(1.05)}
-100%{transform:scale(1)}
+.link-checkout:hover{
+text-decoration:underline;
 }
 
 </style>
@@ -86,13 +88,12 @@ animation:pulsar 1.2s infinite;
 
 <div class="container">
 
-<h2>🧠 Gerador de Nomes</h2>
+<h2>🏷 Gerador de Nomes</h2>
 
 <div>Testes restantes</div>
 <div id="barra" class="barra"></div>
 
-<input id="tipo" placeholder="Tipo de comida (ex: cuscuz, hamburguer)">
-<input id="estilo" placeholder="Estilo do nome (ex: criativo, gourmet)">
+<textarea id="produto" placeholder="Digite o produto (ex: Cuscuz, Lanches, Doces, Tapioca...)"></textarea>
 
 <button onclick="gerar()">Gerar Nomes</button>
 
@@ -103,7 +104,9 @@ animation:pulsar 1.2s infinite;
 <button onclick="limpar()">🗑 Limpar</button>
 <button onclick="voltar()">⬅ Voltar</button>
 
-<div id="checkout"></div>
+<a class="link-checkout" href="https://pay.hotmart.com/K92944551N?off=m4vo1hl6&checkoutMode=10" target="_blank">
+🔥 Página do Cuscuz Gourmet
+</a>
 
 </div>
 
@@ -112,7 +115,7 @@ animation:pulsar 1.2s infinite;
 const params = new URLSearchParams(window.location.search)
 const aluno = params.get("aluno")
 
-let testes = parseInt(localStorage.getItem("testes_total")) || 0
+let testes = parseInt(localStorage.getItem("testes_nomes")) || 0
 
 if(aluno === "1"){
 testes = 0
@@ -133,53 +136,45 @@ document.getElementById("barra").innerText = b
 
 barra()
 
-async function gerar(){
+function gerar(){
 
 if(aluno !== "1" && testes >= 3){
 
-document.getElementById("resultado").innerText="🚫 Testes gratuitos finalizados."
-
-document.getElementById("checkout").innerHTML=
-'<button class="checkout" onclick="checkout()">🔥 DESBLOQUEAR TODAS AS FERRAMENTAS</button>'
+document.getElementById("resultado").innerText =
+"🚫 Seus 3 testes gratuitos terminaram.\n\nClique em 'Página do Cuscuz Gourmet' abaixo para liberar todas as ferramentas."
 
 return
 
 }
 
-const tipo=document.getElementById("tipo").value
-const estilo=document.getElementById("estilo").value
+const produto = document.getElementById("produto").value || "Cuscuz"
 
-document.getElementById("resultado").innerText="Gerando..."
+const nomes =
+"🏷 SUGESTÕES DE NOMES\n\n"+
+"• "+produto+" da Vovó\n"+
+"• "+produto+" Nordestino\n"+
+"• "+produto+" do Sertão\n"+
+"• "+produto+" do Chef\n"+
+"• "+produto+" Delícia\n"+
+"• "+produto+" da Casa\n"+
+"• "+produto+" Especial\n"+
+"• "+produto+" Premium\n"+
+"• "+produto+" do Sabor\n"+
+"• "+produto+" Gourmet"
 
-try{
-
-const res=await fetch("/api/nomes",{
-method:"POST",
-headers:{"Content-Type":"application/json"},
-body:JSON.stringify({tipo,estilo})
-})
-
-const data=await res.json()
-
-document.getElementById("resultado").innerText=data.resultado
-
-}catch(e){
-
-document.getElementById("resultado").innerText="Erro ao gerar resultado."
-
-}
+document.getElementById("resultado").innerText = nomes
 
 if(aluno !== "1"){
 testes++
-localStorage.setItem("testes_total",testes)
+localStorage.setItem("testes_nomes",testes)
 }
 
 barra()
 
 if(testes === 3 && aluno !== "1"){
 
-document.getElementById("checkout").innerHTML=
-'<div style="margin-top:20px">⚠️ Este foi seu último teste gratuito.<br><br><button class="checkout" onclick="checkout()">🔥 DESBLOQUEAR TODAS AS FERRAMENTAS</button></div>'
+document.getElementById("resultado").innerText +=
+"\n\n⚠️ Este foi seu último teste gratuito."
 
 }
 
@@ -188,7 +183,6 @@ document.getElementById("checkout").innerHTML=
 function copiar(){
 
 const texto=document.getElementById("resultado").innerText
-
 navigator.clipboard.writeText(texto)
 
 }
@@ -196,7 +190,6 @@ navigator.clipboard.writeText(texto)
 function whatsapp(){
 
 const texto=encodeURIComponent(document.getElementById("resultado").innerText)
-
 window.open("https://wa.me/?text="+texto)
 
 }
@@ -210,21 +203,15 @@ document.getElementById("resultado").innerText=""
 function voltar(){
 
 if(aluno==="1"){
-window.location.href="app.html?aluno=1"
+window.location.href="/?aluno=1"
 }else{
-window.location.href="app.html"
+window.location.href="/"
 }
-
-}
-
-function checkout(){
-
-window.open("https://pay.hotmart.com/K92944551N?off=m4vo1hl6&checkoutMode=10","_blank")
 
 }
 
 </script>
 
 </body>
-
 </html>
+```
