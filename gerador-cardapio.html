@@ -147,29 +147,22 @@ return
 
 }
 
-const tema = document.getElementById("tema").value || "Cuscuz Gourmet"
+const produto = document.getElementById("produto").value || "Cuscuz"
 
-const cardapio =
-"📋 CARDÁPIO SUGERIDO\n\n"+
-"• "+tema+" Tradicional\n"+
-"• "+tema+" com Carne Seca\n"+
-"• "+tema+" com Frango Cremoso\n"+
-"• "+tema+" com Calabresa\n"+
-"• "+tema+" com Queijo Coalho\n"+
-"• "+tema+" Doce com Leite Condensado\n"+
-"• "+tema+" com Coco\n"+
-"• "+tema+" Romeu e Julieta"
-
-document.getElementById("resultado").innerText = cardapio
+document.getElementById("resultado").innerText =
+"Resultado gerado para: " + produto
 
 if(aluno !== "1"){
+
 testes++
-localStorage.setItem("testes_cardapio",testes)
+localStorage.setItem("testes_nomes",testes) 
+// aqui mantém o nome da chave de cada arquivo
+
 }
 
 barra()
 
-if(testes === 3 && aluno !== "1"){
+if(aluno !== "1" && testes >= 3){
 
 document.getElementById("resultado").innerText +=
 "\n\n⚠️ Este foi seu último teste gratuito."
