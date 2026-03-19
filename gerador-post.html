@@ -147,27 +147,22 @@ return
 
 }
 
-const produto = document.getElementById("produto").value || "Cuscuz Gourmet"
+const produto = document.getElementById("produto").value || "Cuscuz"
 
-const post =
-"📢 POST PARA REDES SOCIAIS\n\n"+
-"Hoje é dia de sabor! 😋\n\n"+
-"Você já experimentou nosso "+produto+"?\n\n"+
-"Feito com ingredientes selecionados e aquele toque especial que só a nossa cozinha tem.\n\n"+
-"Peça agora e descubra porque todo mundo está falando disso!\n\n"+
-"📲 Faça seu pedido agora!\n\n"+
-"#comidacaseira #comidaboa #empreender"
-
-document.getElementById("resultado").innerText = post
+document.getElementById("resultado").innerText =
+"Resultado gerado para: " + produto
 
 if(aluno !== "1"){
+
 testes++
-localStorage.setItem("testes_post",testes)
+localStorage.setItem("testes_nomes",testes) 
+// aqui mantém o nome da chave de cada arquivo
+
 }
 
 barra()
 
-if(testes === 3 && aluno !== "1"){
+if(aluno !== "1" && testes >= 3){
 
 document.getElementById("resultado").innerText +=
 "\n\n⚠️ Este foi seu último teste gratuito."
